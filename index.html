@@ -1,0 +1,1002 @@
+
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+
+                :root{
+  --bg:      #08070a;
+  --bg-2:    #0d0b10;
+  --card:    #121016;
+  --card-2:  #17141c;
+  --line:    rgba(255,46,77,.14);
+  --red:     #ff2e4d;
+  --blood:   #c1121f;
+  --deep:    #7a0213;
+  --text:    #f3eef0;
+  --muted:   #9a9098;
+  --btn-text:#ddd2d5;
+  --radius:  18px;
+  --glow:    0 0 40px rgba(255,46,77,.25);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Manrope',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+.mono{font-family:'JetBrains Mono',monospace}
+::selection{background:var(--blood);color:#fff}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg-2)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--blood),var(--deep));border-radius:8px}
+
+h1,h2,h3,.logo-text,.btn-primary,.section-kicker{font-family:'Unbounded',sans-serif}
+
+.bg-layer{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
+  radial-gradient(1200px 800px at 80% -10%, rgba(122,2,19,.22), transparent 60%),
+  radial-gradient(900px 700px at -10% 40%, rgba(193,18,31,.12), transparent 55%),
+  var(--bg);}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:blobMove 22s ease-in-out infinite alternate}
+.blob-1{width:520px;height:520px;background:radial-gradient(circle,rgba(255,46,77,.28),transparent 70%);top:-140px;right:-100px}
+.blob-2{width:420px;height:420px;background:radial-gradient(circle,rgba(122,2,19,.35),transparent 70%);bottom:-120px;left:-80px;animation-delay:-7s}
+.blob-3{width:300px;height:300px;background:radial-gradient(circle,rgba(193,18,31,.2),transparent 70%);top:45%;left:55%;animation-delay:-14s}
+@keyframes blobMove{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-40px,30px) scale(1.12)}
+  100%{transform:translate(30px,-40px) scale(.95)}
+}
+.noise{position:absolute;inset:-50%;opacity:.05;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation:noiseShift .4s steps(3) infinite;}
+@keyframes noiseShift{0%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}100%{transform:translate(0,0)}}
+.particles span{
+  position:absolute;bottom:-12px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ff5c74, var(--blood) 60%, transparent);
+  opacity:0;animation:riseUp linear infinite;
+}
+@keyframes riseUp{
+  0%{transform:translateY(0) scale(.6);opacity:0}
+  12%{opacity:.7}
+  90%{opacity:.25}
+  100%{transform:translateY(-105vh) scale(1.05);opacity:0}
+}
+
+.nav{
+  position:sticky;top:0;z-index:60;
+  display:flex;align-items:center;gap:28px;
+  padding:16px 5vw;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(8,7,10,.55);
+  border-bottom:1px solid transparent;
+  transition:border-color .35s, background .35s, box-shadow .35s;
+}
+.nav.scrolled{border-bottom-color:var(--line);background:rgba(8,7,10,.82);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.logo-heart{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(255,46,77,.55));animation:heartbeat 2.2s ease-in-out infinite}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1)}
+  8%{transform:scale(1.14)}
+  16%{transform:scale(1)}
+  24%{transform:scale(1.09)}
+  32%{transform:scale(1)}
+}
+.logo-drip{animation:drip 2.2s ease-in infinite}
+@keyframes drip{0%,60%{opacity:0;transform:translateY(-4px)}70%{opacity:1}100%{opacity:0;transform:translateY(6px)}}
+.logo-text{font-weight:700;font-size:17px;letter-spacing:.14em}
+.logo-text em{font-style:normal;color:var(--red)}
+.nav-links{display:flex;gap:26px;margin-left:14px}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.04em;
+  position:relative;padding:4px 0;transition:color .3s;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;
+  background:linear-gradient(90deg,var(--red),var(--blood));
+  transition:width .3s;border-radius:2px;box-shadow:0 0 8px rgba(255,46,77,.6);
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:14px}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);
+  padding:9px 14px;border-radius:12px;transition:border-color .3s, box-shadow .3s;
+}
+.search-box:focus-within{border-color:rgba(255,46,77,.5);box-shadow:0 0 0 3px rgba(255,46,77,.12)}
+.search-box svg{width:16px;height:16px;color:var(--muted);flex-shrink:0}
+.search-box input{
+  background:none;border:none;outline:none;color:var(--text);
+  font-family:'Manrope',sans-serif;font-size:13.5px;width:170px;
+}
+.search-box input::placeholder{color:#6d656e}
+.tg-btn-nav{
+  display:grid;place-items:center;width:42px;height:42px;border-radius:12px;
+  background:var(--card);border:1px solid var(--line);color:var(--text);
+  transition:all .3s;text-decoration:none;
+}
+.tg-btn-nav svg{width:19px;height:19px}
+.tg-btn-nav:hover{border-color:rgba(255,46,77,.55);box-shadow:var(--glow);transform:translateY(-2px);color:var(--red)}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+.burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+
+.hero{position:relative;min-height:84vh;display:flex;align-items:center;padding:40px 5vw 150px}
+.hero-inner{max-width:820px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid var(--line);background:rgba(193,18,31,.08);
+  padding:8px 16px;border-radius:100px;font-size:12.5px;font-weight:600;letter-spacing:.06em;
+  color:#e8b9c0;margin:-14px 0 14px -22px;
+}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.hero-title{
+  position:relative;font-size:clamp(30px,5.2vw,60px);font-weight:900;line-height:1.16;letter-spacing:.02em;
+}
+.hero-title em{
+  font-style:normal;
+  background:linear-gradient(92deg,#ff5c74,var(--red) 45%,var(--blood));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px rgba(255,46,77,.35));
+}
+.hero-ghost{
+  position:absolute;top:-52px;left:-10px;z-index:-1;
+  font-size:clamp(52px,10vw,130px);font-weight:900;letter-spacing:.06em;
+  color:transparent;-webkit-text-stroke:1px rgba(255,46,77,.12);
+  user-select:none;pointer-events:none;white-space:nowrap;
+}
+.hero-sub{margin-top:22px;color:var(--muted);font-size:16.5px;line-height:1.7;max-width:580px}
+.hero-cta{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap}
+.hero-ecg{position:absolute;left:0;right:0;bottom:26px;height:120px;opacity:.8;pointer-events:none}
+.hero-ecg svg{width:100%;height:100%}
+.ecg-line,.ecg-glow{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ecg-glow{stroke:rgba(255,46,77,.35);stroke-width:6;filter:blur(4px)}
+.ecg-line{stroke:var(--red);stroke-width:2;stroke-dasharray:2600;stroke-dashoffset:2600;animation:ecg 4s linear infinite}
+@keyframes ecg{0%{stroke-dashoffset:2600}70%,100%{stroke-dashoffset:0}}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-decoration:none;
+  font-family:'Unbounded';font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:15px 30px;border-radius:14px;border:1px solid transparent;transition:all .3s;
+}
+.btn svg{width:17px;height:17px}
+.btn-primary{
+  color:var(--btn-text);background:linear-gradient(135deg,#e01b34,var(--deep));
+  box-shadow:0 8px 26px rgba(193,18,31,.35), inset 0 1px 0 rgba(255,255,255,.15);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(255,46,77,.45), inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-ghost{color:var(--text);border-color:var(--line);background:rgba(255,255,255,.02)}
+.btn-ghost:hover{border-color:rgba(255,46,77,.55);box-shadow:var(--glow);transform:translateY(-3px)}
+.btn-sm{padding:11px 18px;font-size:10.5px;border-radius:11px}
+.btn.loading{pointer-events:none;opacity:.65}
+.btn.copied{
+  background:linear-gradient(135deg,#33543f,#1c2f24);
+  box-shadow:0 8px 26px rgba(30,60,40,.3), inset 0 1px 0 rgba(255,255,255,.06);
+  color:#cfe0d4;
+}
+
+.howto{padding:20px 5vw 30px}
+.steps{display:flex;align-items:stretch;gap:16px;flex-wrap:wrap}
+.step{
+  flex:1;min-width:220px;
+  background:linear-gradient(160deg,var(--card-2),var(--card));
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:26px 24px;transition:transform .35s, box-shadow .35s, border-color .35s;
+}
+.step:hover{transform:translateY(-6px);border-color:rgba(255,46,77,.4);box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 26px rgba(255,46,77,.12)}
+.step-num{
+  font-family:'Unbounded';font-size:30px;font-weight:900;
+  background:linear-gradient(135deg,#ff5c74,var(--blood));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  display:block;margin-bottom:14px;
+}
+.step h4{font-size:15.5px;font-weight:800;margin-bottom:8px}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.step-arrow{align-self:center;color:var(--red);font-size:22px;opacity:.6;text-shadow:0 0 12px rgba(255,46,77,.6)}
+
+.catalog{padding:50px 5vw 90px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:38px}
+.section-kicker{font-size:12px;font-weight:400;letter-spacing:.3em;color:var(--red)}
+.section-title{font-size:clamp(24px,3.2vw,38px);font-weight:900;letter-spacing:.03em;margin-top:8px}
+.section-title em{font-style:normal;color:var(--red);text-shadow:0 0 24px rgba(255,46,77,.45)}
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+.filter-pill{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--muted);background:var(--card);border:1px solid var(--line);
+  padding:10px 20px;border-radius:100px;cursor:pointer;transition:all .3s;text-transform:uppercase;
+}
+.filter-pill:hover{color:var(--text);border-color:rgba(255,46,77,.4)}
+.filter-pill.active{
+  color:#fff;background:linear-gradient(135deg,var(--blood),var(--deep));
+  border-color:transparent;box-shadow:0 6px 20px rgba(193,18,31,.4);
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+
+.card{
+  position:relative;background:linear-gradient(160deg,var(--card-2),var(--card));
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.8,.25,1), box-shadow .4s, border-color .4s;
+  display:flex;flex-direction:column;
+}
+.card::before{
+  content:"";position:absolute;inset:0;border-radius:var(--radius);padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(255,46,77,.6),transparent 40%,transparent 60%,rgba(122,2,19,.5));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .4s;z-index:3;
+}
+.card:hover{transform:translateY(-8px);box-shadow:0 22px 50px rgba(0,0,0,.55),0 0 34px rgba(255,46,77,.16)}
+.card:hover::before{opacity:1}
+.card-art{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0a0810}
+.card-art>svg{width:100%;height:100%;display:block;transition:transform .6s cubic-bezier(.2,.8,.25,1)}
+.card:hover .card-art>svg{transform:scale(1.07)}
+.chips{position:absolute;top:12px;left:12px;z-index:2;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.14em;
+  padding:5px 10px;border-radius:7px;text-transform:uppercase;backdrop-filter:blur(6px);
+}
+.chip.black{background:rgba(10,6,10,.7);border:1px solid rgba(255,46,77,.55);color:#ff8095}
+.chip.white{background:rgba(243,238,240,.1);border:1px solid rgba(243,238,240,.35);color:var(--text)}
+.chip.mobile{background:rgba(122,2,19,.45);border:1px solid rgba(193,18,31,.7);color:#ffb3bf}
+.chip.proto{background:rgba(255,46,77,.16);border:1px solid rgba(255,46,77,.4);color:#ff8095}
+.card-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+.card-cat{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:700}
+.card-name{font-size:15.5px;font-weight:800;margin:7px 0 6px;line-height:1.4}
+.card-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;flex:1}
+.card-row{display:flex;gap:10px;align-items:center}
+.card-row .btn{flex:1}
+.icon-btn{
+  background:var(--bg-2);border:1px solid var(--line);color:var(--muted);
+  width:40px;height:40px;border-radius:11px;cursor:pointer;display:grid;place-items:center;
+  transition:all .25s;flex-shrink:0;
+}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn:hover{border-color:rgba(255,46,77,.55);color:var(--red);box-shadow:0 0 16px rgba(255,46,77,.2);transform:translateY(-2px)}
+
+.empty-state{text-align:center;padding:70px 0;color:var(--muted)}
+.empty-state svg{width:90px;height:90px;margin-bottom:18px;opacity:.7}
+.empty-state p{font-size:15px}
+
+.promo{padding:20px 5vw 90px}
+.promo-card{
+  position:relative;overflow:hidden;text-align:center;
+  border:1px solid var(--line);border-radius:26px;padding:44px 8vw 54px;
+  background:linear-gradient(160deg,rgba(122,2,19,.18),rgba(18,16,22,.9));
+}
+.promo-bg{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(600px 300px at 50% 120%, rgba(255,46,77,.25), transparent 65%);}
+.promo-card h2{font-size:clamp(24px,3.6vw,42px);font-weight:900;margin:14px 0 16px;letter-spacing:.03em}
+.promo-card h2 em{font-style:normal;color:var(--red);text-shadow:0 0 26px rgba(255,46,77,.5)}
+.promo-card p{color:var(--muted);max-width:540px;margin:0 auto;line-height:1.7}
+.promo-card p b{color:var(--text)}
+.promo-cta{display:flex;gap:14px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+
+.footer{border-top:1px solid var(--line);background:rgba(10,8,12,.7);padding:60px 5vw 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:44px}
+.footer-brand p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-top:16px;max-width:300px}
+.footer-col h4{font-family:'Unbounded';font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+.footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:11px;transition:color .25s,transform .25s}
+.footer-col a:hover{color:var(--text);transform:translateX(4px)}
+.footer-tg{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  border-top:1px solid var(--line);padding:22px 0;
+  color:var(--muted);text-decoration:none;font-size:13.5px;font-weight:600;letter-spacing:.05em;
+  transition:color .3s;
+}
+.footer-tg .heart{color:var(--red);animation:heartbeat 2.2s ease-in-out infinite;display:inline-block}
+.footer-tg svg{width:16px;height:16px;transition:transform .3s}
+.footer-tg:hover{color:var(--text)}
+.footer-tg:hover svg{transform:translateX(5px)}
+
+.modal{
+  position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:4vh 4vw;
+  background:rgba(4,3,6,.72);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-panel{
+  width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;
+  background:linear-gradient(180deg,var(--card-2),var(--bg-2));
+  border:1px solid rgba(255,46,77,.3);border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 50px rgba(255,46,77,.12);
+  transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.2,.8,.25,1);
+}
+.modal.open .modal-panel{transform:translateY(0) scale(1)}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:15px;font-weight:700;margin-top:6px;letter-spacing:.02em}
+.close-btn{background:var(--card);border:1px solid var(--line);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:14px;transition:all .25s;flex-shrink:0}
+.close-btn:hover{border-color:rgba(255,46,77,.55);color:var(--red);transform:rotate(90deg)}
+.pre-box{
+  flex:1;overflow:auto;margin:0;padding:18px 24px;
+  font-size:11.5px;line-height:1.75;color:#c9bfc6;
+  background:#0a0810;border-bottom:1px solid var(--line);
+  white-space:pre-wrap;word-break:break-all;
+  min-height:200px;
+}
+.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 24px}
+.modal-foot span{font-size:11.5px;color:var(--muted)}
+
+.toasts{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
+.toast{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(23,20,28,.92);border:1px solid rgba(255,46,77,.4);
+  backdrop-filter:blur(10px);
+  padding:13px 22px;border-radius:14px;font-size:13.5px;font-weight:600;
+  box-shadow:0 12px 34px rgba(0,0,0,.55),0 0 20px rgba(255,46,77,.15);
+  animation:toastIn .35s cubic-bezier(.2,.8,.25,1), toastOut .35s ease 2.4s forwards;
+  max-width:90vw;
+}
+.toast .heart{color:var(--red);font-size:15px}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{to{opacity:0;transform:translateY(12px) scale(.95)}}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.25,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media (max-width:960px){
+  .nav-links{display:none}
+  .nav-links.open{
+    display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
+    background:rgba(10,8,12,.97);padding:22px 5vw;gap:18px;border-bottom:1px solid var(--line);
+  }
+  .burger{display:flex}
+  .search-box input{width:110px}
+  .hero{min-height:72vh;padding-top:30px}
+  .hero-ghost{display:none}
+  .hero-tag{margin-left:-8px}
+  .step-arrow{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .search-box{display:none}
+  .footer-grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .hero-tag{margin-left:0}
+}
+
+
+              </style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HEARTBLEED — бесплатные VPN-конфиги в один клик</title>
+<meta name="description" content="Бесплатные VPN-конфиги для импорта в happ, v2rayN и другие VPN-клиенты. Нажми «Скопировать ссылку» — и добавь подписку в свой клиент. Black и White режимы, мобильные подборки.">
+<meta name="keywords" content="vpn, vpn конфиги, бесплатные vpn, happ, v2rayn, vless, shadowsocks, v2ray, vpn для россии, white vpn, black vpn, подписка vpn, heartbleed">
+<meta name="author" content="heartbleed">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#08070a">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HEARTBLEED">
+<meta property="og:title" content="HEARTBLEED — бесплатные VPN-конфиги в один клик">
+<meta property="og:description" content="Подборки VPN-конфигов для импорта в happ, v2rayN и другие клиенты. Скопировал ссылку — подключился.">
+<meta property="og:locale" content="ru_RU">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HEARTBLEED — бесплатные VPN-конфиги">
+<meta name="twitter:description" content="VPN-конфиги для happ / v2rayN и других клиентов. Копирование ссылки в один клик.">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5c74'/%3E%3Cstop offset='.5' stop-color='%23e01b34'/%3E%3Cstop offset='1' stop-color='%237a0213'/%3E%3C/linearGradient%3E%3CradialGradient id='gl' cx='50%25' cy='45%25' r='60%25'%3E%3Cstop offset='0' stop-color='%23ff2e4d' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ff2e4d' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='%2308070a'/%3E%3Ccircle cx='50' cy='46' r='40' fill='url(%23gl)'/%3E%3Cpath d='M50 80 C24 61 14 46 14 33 C14 21 23 13 34 13 C41 13 46 16 50 22 C54 16 59 13 66 13 C77 13 86 21 86 33 C86 46 76 61 50 80 Z' fill='url(%23g)'/%3E%3Cpath d='M50 80 C50 80 46.5 88 46.5 91 C46.5 93 48 94.5 50 94.5 C52 94.5 53.5 93 53.5 91 C53.5 88 50 80 50 80 Z' fill='%23c1121f'/%3E%3Cellipse cx='37' cy='28' rx='8' ry='4.5' fill='%23ffffff' opacity='.28' transform='rotate(-25 37 28)'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5c74'/%3E%3Cstop offset='.5' stop-color='%23e01b34'/%3E%3Cstop offset='1' stop-color='%237a0213'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='%2308070a'/%3E%3Cpath d='M50 80 C24 61 14 46 14 33 C14 21 23 13 34 13 C41 13 46 16 50 22 C54 16 59 13 66 13 C77 13 86 21 86 33 C86 46 76 61 50 80 Z' fill='url(%23g)'/%3E%3Cpath d='M50 80 C50 80 46.5 88 46.5 91 C46.5 93 48 94.5 50 94.5 C52 94.5 53.5 93 53.5 91 C53.5 88 50 80 50 80 Z' fill='%23c1121f'/%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-700-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-900-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-800-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/cyrillic-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/cyrillic-700-normal.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="blob blob-1" id="blob1"></div>
+  <div class="blob blob-2" id="blob2"></div>
+  <div class="blob blob-3" id="blob3"></div>
+  <div class="noise"></div>
+  <div class="particles" id="particles"></div>
+</div>
+
+<header class="nav" id="nav">
+  <a href="#" class="logo">
+    <svg class="logo-heart" viewBox="0 0 100 100" fill="none">
+      <defs>
+        <linearGradient id="logoGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ff2e4d"/>
+          <stop offset="100%" stop-color="#7a0213"/>
+        </linearGradient>
+      </defs>
+      <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
+            fill="url(#logoGrad)"/>
+      <path class="logo-drip" d="M50 88 C50 88 47 94 47 97 C47 99 48.5 100 50 100 C51.5 100 53 99 53 97 C53 94 50 88 50 88 Z"
+            fill="#c1121f"/>
+    </svg>
+    <span class="logo-text">HEART<em>BLEED</em></span>
+  </a>
+
+  <nav class="nav-links">
+    <a href="#configs">Конфиги</a>
+    <a href="#howto">Как подключить</a>
+    <a href="#promo">Telegram</a>
+    <a href="#footer">Контакты</a>
+  </nav>
+
+  <div class="nav-actions">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="vless, white, mobile…">
+    </div>
+    <a class="tg-btn-nav" href="https://t.me/heartbleeed" target="_blank" rel="noopener" aria-label="Telegram">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5L18.6 6c.4-.3-.1-.5-.6-.2L7.3 12.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.6z"/></svg>
+    </a>
+    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag reveal">
+      <span class="dot"></span> бесплатно · happ / v2rayN и другие клиенты
+    </div>
+    <h1 class="hero-title reveal">
+      <span class="hero-ghost" aria-hidden="true">HEARTBLEED</span>
+      VPN-КОНФИГИ<br>В <em>ОДИН КЛИК</em>
+    </h1>
+    <p class="hero-sub reveal">
+      Бесплатные подборки конфигов для импорта в happ, v2rayN и другие VPN-клиенты.
+      Нажал «Скопировать ссылку» — она уже в буфере обмена. Добавил подписку в клиент — ты в сети.
+    </p>
+    <div class="hero-cta reveal">
+      <a href="#configs" class="btn btn-primary">
+        Выбрать конфиг
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#howto" class="btn btn-ghost">Как подключить</a>
+    </div>
+  </div>
+
+  <div class="hero-ecg" aria-hidden="true">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path class="ecg-line" d="M0 60 H380 L400 60 L415 20 L435 100 L455 45 L470 60 H760 L780 60 L795 20 L815 100 L835 45 L850 60 H1200"/>
+      <path class="ecg-glow" d="M0 60 H380 L400 60 L415 20 L435 100 L455 45 L470 60 H760 L780 60 L795 20 L815 100 L835 45 L850 60 H1200"/>
+    </svg>
+  </div>
+</section>
+
+<section class="howto" id="howto">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-kicker">// инструкция</span>
+      <h2 class="section-title">ТРИ ШАГА ДО <em>СВОБОДЫ</em></h2>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <span class="step-num">01</span>
+      <h4>Скопируй</h4>
+      <p>Нажми «Скопировать ссылку» на нужном конфиге — ссылка окажется в буфере обмена.</p>
+    </div>
+    <div class="step-arrow reveal" aria-hidden="true">→</div>
+    <div class="step reveal" style="transition-delay:120ms">
+      <span class="step-num">02</span>
+      <h4>Открой клиент</h4>
+      <p>Запусти happ, v2rayN или любой другой VPN-клиент с поддержкой подписок.</p>
+    </div>
+    <div class="step-arrow reveal" aria-hidden="true">→</div>
+    <div class="step reveal" style="transition-delay:240ms">
+      <span class="step-num">03</span>
+      <h4>Импортируй</h4>
+      <p>Добавь подписку из буфера обмена — и подключайся к свободной сети.</p>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="configs">
+  <div class="section-head reveal">
+    <div>
+      <span class="section-kicker">// подборки</span>
+      <h2 class="section-title">VPN-<em>КОНФИГИ</em></h2>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="grid" id="configGrid"></div>
+  <div class="empty-state" id="emptyState" hidden>
+    <svg viewBox="0 0 100 100" fill="none">
+      <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
+            stroke="#c1121f" stroke-width="3" stroke-dasharray="6 8"/>
+    </svg>
+    <p>Ничего не найдено. Сердце разрывается…</p>
+  </div>
+</section>
+
+<section class="promo" id="promo">
+  <div class="promo-card reveal">
+    <div class="promo-bg" aria-hidden="true"></div>
+    <span class="section-kicker">// heartbleed</span>
+    <h2>ПОДПИШИСЬ НА <em>TELEGRAM</em></h2>
+    <p>Исследования по безопасности, обучающие посты, разборы уязвимостей и много другого — всё в канале <b>@heartbleeed</b>. Там же — быстрая связь и помощь.</p>
+    <div class="promo-cta">
+      <a href="https://t.me/heartbleeed" target="_blank" rel="noopener" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5L18.6 6c.4-.3-.1-.5-.6-.2L7.3 12.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.6z"/></svg>
+        Открыть канал
+      </a>
+      <button class="btn btn-ghost" id="copyNickBtn">Скопировать @heartbleeed</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <svg class="logo-heart" viewBox="0 0 100 100" fill="none">
+          <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z" fill="#c1121f"/>
+        </svg>
+        <span class="logo-text">HEART<em>BLEED</em></span>
+      </a>
+      <p>Бесплатные VPN-конфиги для импорта в happ, v2rayN и другие клиенты. Скопировал ссылку — подключился.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Разделы</h4>
+      <a href="#configs">Конфиги</a><a href="#howto">Инструкция</a><a href="#promo">Telegram</a>
+    </div>
+    <div class="footer-col">
+      <h4>Клиенты</h4>
+      <a href="https://www.happ.su/main/ru" target="_blank" rel="noopener">happ</a>
+      <a href="https://en.v2rayn.org" target="_blank" rel="noopener">v2rayN</a>
+      <a href="#" data-hint="другие клиенты">другие</a>
+    </div>
+    <div class="footer-col">
+      <h4>Связь</h4>
+      <a href="https://t.me/heartbleeed" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://bugbounty.bi.zone/profile/Heartbleed/hackactivity" target="_blank" rel="noopener">BI.ZONE</a>
+      <a href="https://vk.ru/heartbieed" target="_blank" rel="noopener">VK</a>
+      <a href="https://steamcommunity.com/id/Heartbleeddd/" target="_blank" rel="noopener">Steam</a>
+    </div>
+  </div>
+  <a class="footer-tg" href="https://t.me/heartbleeed" target="_blank" rel="noopener">
+    <span class="heart">♥</span> подпишись на телеграм — @heartbleeed
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+</footer>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <span class="section-kicker" id="modalType"></span>
+        <h3 id="modalName"></h3>
+      </div>
+      <button class="close-btn" id="modalClose" aria-label="Закрыть">✕</button>
+    </div>
+    <pre class="pre-box mono" id="modalText"></pre>
+    <div class="modal-foot">
+      <span class="mono">для импорта в happ / v2rayN</span>
+      <button class="btn btn-primary btn-sm" id="modalCopy">Скопировать ссылку</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
+
+
+              <script>
+                              const FILTERS = ['Всё', 'Black', 'White', 'Mobile', 'Mix'];
+
+const CONFIGS = [
+  {
+    id: 'black-ss-all',
+    name: 'BLACK SS + All RUS',
+    type: 'Shadowsocks',
+    tags: ['BLACK', 'SS'],
+    art: 'pulse',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt',
+    desc: 'Чёрный режим на Shadowsocks: весь трафик идёт через VPN, кроме российских сервисов. Ключи для всех регионов РФ.',
+  },
+  {
+    id: 'black-ss-weak-dpi',
+    name: 'BLACK SS · Weak DPI',
+    type: 'Shadowsocks',
+    tags: ['BLACK', 'SS'],
+    art: 'smoke',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS_WEAK_DPI_RUS.txt',
+    desc: 'Подборка для провайдеров со слабым DPI: Shadowsocks-ключи, которые стабильно работают там, где другие отваливаются.',
+  },
+  {
+    id: 'black-vless',
+    name: 'BLACK VLESS RUS',
+    type: 'VLESS',
+    tags: ['BLACK', 'VLESS'],
+    art: 'slash',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS.txt',
+    desc: 'Чёрный режим на VLESS: максимальная устойчивость к блокировкам, весь трафик через туннель, кроме RU-сервисов.',
+  },
+  {
+    id: 'white-cidr',
+    name: 'WHITE CIDR RU · all',
+    type: 'CIDR-список',
+    tags: ['WHITE'],
+    art: 'orb',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt',
+    desc: 'Белый режим: через VPN идут только российские сайты и сервисы, всё остальное — напрямую. Минимальный расход трафика.',
+  },
+  {
+    id: 'vless-white-mobile',
+    name: 'VLESS Reality · White · Mobile',
+    type: 'VLESS Reality',
+    tags: ['WHITE', 'MOBILE', 'VLESS'],
+    art: 'heart',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt',
+    desc: 'Белые списки на VLESS Reality, оптимизировано для мобильных клиентов: экономит батарею и трафик.',
+  },
+  {
+    id: 'black-vless-mobile',
+    name: 'BLACK VLESS RUS · Mobile',
+    type: 'VLESS',
+    tags: ['BLACK', 'MOBILE', 'VLESS'],
+    art: 'drip',
+    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS_mobile.txt',
+    desc: 'Чёрный режим на VLESS для смартфонов: весь трафик через VPN, подборка адаптирована под мобильные клиенты.',
+  },
+  {
+    id: 'free-servers-mix',
+    name: 'FREE SERVERS · Mix',
+    type: 'Подписка',
+    tags: ['MIX'],
+    art: 'smoke',
+    url: 'https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub',
+    desc: 'Большой микс бесплатных серверов: готовая подписка, много локаций. Скопируй ссылку и добавь в happ / v2rayN.',
+  },
+  {
+    id: 'v2ray-global-mix',
+    name: 'GLOBAL MIX · V2Ray',
+    type: 'Подписка',
+    tags: ['MIX'],
+    art: 'orb',
+    url: 'https://raw.githubusercontent.com/miladtahanian/V2RayCFGDumper/refs/heads/main/sub.txt',
+    desc: 'Свежая подборка V2Ray-конфигов со всего мира, регулярно обновляется. Скопируй ссылку и импортируй в свой клиент.',
+  },
+];
+
+const TELEGRAM_NICK = '@heartbleeed';
+
+function artSVG(cfg) {
+  const g  = 'grad-' + cfg.id;
+  const rg = 'rglow-' + cfg.id;
+  const defs = `
+    <defs>
+      <radialGradient id="${rg}" cx="50%" cy="38%" r="75%">
+        <stop offset="0%" stop-color="#1d1218"/>
+        <stop offset="55%" stop-color="#100c12"/>
+        <stop offset="100%" stop-color="#07050a"/>
+      </radialGradient>
+      <linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ff2e4d"/>
+        <stop offset="55%" stop-color="#c1121f"/>
+        <stop offset="100%" stop-color="#5e0110"/>
+      </linearGradient>
+    </defs>`;
+
+  let shape = '';
+  switch (cfg.art) {
+    case 'drip':
+      shape = `
+        <circle cx="200" cy="90" r="48" fill="url(#${g})" opacity=".92"/>
+        <rect x="160" y="90" width="15" height="70" rx="7.5" fill="url(#${g})" opacity=".85"/>
+        <rect x="193" y="90" width="14" height="104" rx="7" fill="url(#${g})" opacity=".95"/>
+        <rect x="227" y="90" width="12" height="52" rx="6" fill="url(#${g})" opacity=".75"/>
+        <circle cx="200" cy="216" r="6" fill="#ff2e4d" opacity=".8"/>
+        <circle cx="167" cy="176" r="4" fill="#c1121f" opacity=".7"/>`;
+      break;
+    case 'heart':
+      shape = `
+        <circle cx="200" cy="130" r="76" fill="#ff2e4d" opacity=".07"/>
+        <path transform="translate(128,52) scale(1.45)"
+          d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
+          fill="url(#${g})" opacity=".95"/>`;
+      break;
+    case 'pulse':
+      shape = `
+        <circle cx="200" cy="140" r="84" fill="none" stroke="url(#${g})" stroke-width="2" opacity=".35"/>
+        <path d="M90 140 H155 L170 140 L183 96 L203 188 L219 128 L231 140 H310"
+          fill="none" stroke="url(#${g})" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="203" cy="188" r="5" fill="#ff2e4d" opacity=".9"/>`;
+      break;
+    case 'slash':
+      shape = `
+        <g stroke="url(#${g})" stroke-linecap="round">
+          <line x1="95"  y1="225" x2="210" y2="52"  stroke-width="24" opacity=".9"/>
+          <line x1="160" y1="232" x2="268" y2="68"  stroke-width="13" opacity=".55"/>
+          <line x1="226" y1="228" x2="308" y2="102" stroke-width="7"  opacity=".35"/>
+        </g>
+        <circle cx="122" cy="80" r="5" fill="#ff2e4d" opacity=".7"/>
+        <circle cx="292" cy="200" r="6" fill="#c1121f" opacity=".6"/>`;
+      break;
+    case 'orb':
+      shape = `
+        <circle cx="200" cy="135" r="82" fill="url(#${g})" opacity=".16"/>
+        <circle cx="200" cy="135" r="58" fill="none" stroke="url(#${g})" stroke-width="2.5" opacity=".6"/>
+        <circle cx="200" cy="135" r="36" fill="url(#${g})" opacity=".9"/>
+        <circle cx="188" cy="122" r="9" fill="#ff8095" opacity=".55"/>`;
+      break;
+    case 'smoke':
+      shape = `
+        <ellipse cx="165" cy="155" rx="85" ry="52" fill="url(#${g})" opacity=".28" transform="rotate(-18 165 155)"/>
+        <ellipse cx="238" cy="112" rx="70" ry="42" fill="url(#${g})" opacity=".4" transform="rotate(14 238 112)"/>
+        <ellipse cx="203" cy="140" rx="46" ry="30" fill="#ff2e4d" opacity=".22"/>
+        <circle cx="203" cy="138" r="8" fill="#ffb3bf" opacity=".8"/>`;
+      break;
+  }
+
+  return `<svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    ${defs}<rect width="400" height="320" fill="url(#${rg})"/>${shape}
+  </svg>`;
+}
+
+const state = {
+  filter: 'Всё',
+  query: '',
+};
+const cache = {};
+const pending = {};
+
+const gridEl      = document.getElementById('configGrid');
+const filtersEl   = document.getElementById('filters');
+const searchInput = document.getElementById('searchInput');
+const emptyState  = document.getElementById('emptyState');
+const modal       = document.getElementById('modal');
+const modalName   = document.getElementById('modalName');
+const modalType   = document.getElementById('modalType');
+const modalText   = document.getElementById('modalText');
+const modalCopy   = document.getElementById('modalCopy');
+const toastsEl    = document.getElementById('toasts');
+const nav         = document.getElementById('nav');
+
+async function getConfig(cfg) {
+  if (cache[cfg.id]) return cache[cfg.id];
+  if (!pending[cfg.id]) {
+    pending[cfg.id] = fetch(cfg.url)
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(text => {
+        const data = { text: text.trim() };
+        cache[cfg.id] = data;
+        return data;
+      })
+      .finally(() => { delete pending[cfg.id]; });
+  }
+  return pending[cfg.id];
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+}
+
+function renderFilters() {
+  filtersEl.innerHTML = FILTERS.map(f =>
+    `<button class="filter-pill${f === state.filter ? ' active' : ''}" data-filter="${f}">${f}</button>`
+  ).join('');
+  filtersEl.querySelectorAll('.filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.filter = btn.dataset.filter;
+      renderFilters();
+      renderConfigs();
+    });
+  });
+}
+
+function visibleConfigs() {
+  return CONFIGS.filter(c => {
+    const fOK = state.filter === 'Всё' || c.tags.includes(state.filter.toUpperCase());
+    const qOK = !state.query ||
+      (c.name + ' ' + c.desc + ' ' + c.type + ' ' + c.tags.join(' '))
+        .toLowerCase().includes(state.query.toLowerCase());
+    return fOK && qOK;
+  });
+}
+
+function chipHTML(tag) {
+  const cls = tag === 'MOBILE' ? 'mobile' : tag === 'WHITE' ? 'white' : tag === 'BLACK' ? 'black' : 'proto';
+  return `<span class="chip ${cls}">${tag}</span>`;
+}
+
+const EYE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
+function renderConfigs() {
+  const list = visibleConfigs();
+  emptyState.hidden = list.length !== 0;
+
+  gridEl.innerHTML = list.map((c, i) => `
+    <article class="card reveal" style="transition-delay:${i * 70}ms">
+      <div class="card-art">
+        <div class="chips">${c.tags.map(chipHTML).join('')}</div>
+        ${artSVG(c)}
+      </div>
+      <div class="card-body">
+        <div class="card-cat mono">${c.type} · для happ / v2rayN</div>
+        <h3 class="card-name">${c.name}</h3>
+        <p class="card-desc">${c.desc}</p>
+        <div class="card-row">
+          <button class="btn btn-primary btn-sm" data-copy="${c.id}">Скопировать ссылку</button>
+          <button class="icon-btn" data-preview="${c.id}" aria-label="Предпросмотр">${EYE_ICON}</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  gridEl.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => handleCopy(btn, cfgById(btn.dataset.copy)));
+  });
+  gridEl.querySelectorAll('[data-preview]').forEach(btn => {
+    btn.addEventListener('click', () => openPreview(cfgById(btn.dataset.preview)));
+  });
+
+  observeReveals();
+}
+
+const cfgById = id => CONFIGS.find(c => c.id === id);
+
+async function handleCopy(btn, cfg) {
+  const original = btn.textContent;
+  await copyText(cfg.url);
+  btn.classList.add('copied');
+  btn.textContent = '✓ Скопировано';
+  toast(`Ссылка скопирована — ${cfg.name}. Добавь подписку в happ / v2rayN`);
+  setTimeout(() => {
+    btn.classList.remove('copied');
+    btn.textContent = original;
+  }, 1800);
+}
+
+let previewCfg = null;
+
+async function openPreview(cfg) {
+  previewCfg = cfg;
+  modalType.textContent = '// ' + cfg.type.toLowerCase();
+  modalName.textContent = cfg.name;
+  modalText.textContent = 'загрузка…';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  try {
+    const { text } = await getConfig(cfg);
+    modalText.textContent = text.length > 60000 ? text.slice(0, 60000) + '\n\n… (обрезано для предпросмотра)' : text;
+  } catch {
+    modalText.textContent = 'ошибка загрузки :(';
+  }
+}
+
+function closePreview() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closePreview);
+modal.addEventListener('click', e => { if (e.target === modal) closePreview(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
+
+modalCopy.addEventListener('click', async () => {
+  if (!previewCfg) return;
+  const original = modalCopy.textContent;
+  await copyText(previewCfg.url);
+  modalCopy.classList.add('copied');
+  modalCopy.textContent = '✓ Скопировано';
+  toast(`Ссылка скопирована — ${previewCfg.name}`);
+  setTimeout(() => {
+    modalCopy.classList.remove('copied');
+    modalCopy.textContent = original;
+  }, 1800);
+});
+
+searchInput.addEventListener('input', e => {
+  state.query = e.target.value.trim();
+  renderConfigs();
+});
+
+document.getElementById('copyNickBtn').addEventListener('click', async () => {
+  await copyText(TELEGRAM_NICK);
+  toast(`Ник ${TELEGRAM_NICK} скопирован ♥`);
+});
+
+document.querySelectorAll('[data-hint]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    toast(`Скачай ${a.dataset.hint} и добавь подписку из буфера обмена`);
+  });
+});
+
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span class="heart">❤</span> ${msg}`;
+  toastsEl.appendChild(el);
+  setTimeout(() => el.remove(), 2900);
+}
+
+(function initParticles(){
+  const wrap = document.getElementById('particles');
+  for (let i = 0; i < 26; i++) {
+    const p = document.createElement('span');
+    const size = 2 + Math.random() * 5;
+    p.style.width  = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left   = Math.random() * 100 + '%';
+    p.style.animationDuration = (9 + Math.random() * 14) + 's';
+    p.style.animationDelay    = (-Math.random() * 20) + 's';
+    wrap.appendChild(p);
+  }
+})();
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+  });
+}, { threshold: 0.12 });
+
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el));
+}
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 30);
+}, { passive: true });
+
+const burger = document.getElementById('burger');
+const navLinks = document.querySelector('.nav-links');
+burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+const blob1 = document.getElementById('blob1');
+const blob2 = document.getElementById('blob2');
+window.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5);
+  const y = (e.clientY / window.innerHeight - 0.5);
+  blob1.style.translate = `${x * 40}px ${y * 40}px`;
+  blob2.style.translate = `${x * -30}px ${y * -30}px`;
+}, { passive: true });
+
+renderFilters();
+renderConfigs();
+observeReveals();
+
+
+              </script>
+                        </body>
+                        </html>
+                    
