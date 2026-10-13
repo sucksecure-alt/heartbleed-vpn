@@ -62,7 +62,7 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
   100%{transform:translate(30px,-40px) scale(.95)}
 }
 .noise{position:absolute;inset:-50%;opacity:.05;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='120'%20height='120'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect%20width='120'%20height='120'%20filter='url(%23n)'%20opacity='0.6'/%3E%3C/svg%3E");
   animation:noiseShift .4s steps(3) infinite;}
 @keyframes noiseShift{0%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}100%{transform:translate(0,0)}}
 .particles span{
@@ -146,29 +146,51 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
 }
 .hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:blink 1.6s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
 .hero-title{
   position:relative;font-size:clamp(30px,5.2vw,60px);font-weight:900;line-height:1.16;letter-spacing:.02em;
 }
 .hero-title .ch{
   display:inline-block;white-space:pre;
-  opacity:0;transform:translateY(30px) rotate(5deg) scale(.94);
-  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both;
-  animation-delay:calc(var(--i) * 42ms + .25s);
+  opacity:0;
+  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both,
+            charFloat 4.2s ease-in-out infinite;
+  animation-delay:calc(var(--i) * 42ms + .25s),
+                   calc(var(--i) * 90ms + 1.4s);
 }
 @keyframes charIn{
-  60%{opacity:1;transform:translateY(-4px) rotate(-1deg) scale(1.02)}
+  0%{opacity:0;transform:translateY(34px) rotate(6deg) scale(.9)}
+  60%{opacity:1;transform:translateY(-5px) rotate(-1.5deg) scale(1.04)}
   100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}
+}
+@keyframes charFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
 }
 .hero-title em{font-style:normal;color:var(--red)}
 .hero-title em .ch{
-  background:linear-gradient(180deg,#ff8095 0%,#ff2e4d 35%,#c1121f 65%,#ff2e4d 100%);
-  background-size:100% 250%;
+  background:linear-gradient(180deg,#ff8095 0%,#ff2e4d 30%,#c1121f 60%,#ff2e4d 85%,#ff8095 100%);
+  background-size:100% 300%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 18px rgba(255,46,77,.35));
-  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both, emShine 4.5s linear infinite;
-  animation-delay:calc(var(--i) * 42ms + .25s), 0s;
+  filter:drop-shadow(0 0 18px rgba(255,46,77,.4));
+  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both,
+            charFloat 4.2s ease-in-out infinite,
+            emShine 4s linear infinite,
+            emGlitch 7s steps(1) infinite;
+  animation-delay:calc(var(--i) * 42ms + .25s),
+                   calc(var(--i) * 90ms + 1.4s),
+                   calc(var(--i) * 60ms),
+                   calc(var(--i) * 130ms + 3s);
 }
-@keyframes emShine{to{background-position:0 -250%}}
+@keyframes emShine{to{background-position:0 -300%}}
+@keyframes emGlitch{
+  0%,93%,100%{transform:translateY(0) skewX(0)}
+  94%{transform:translate(-3px,1px) skewX(4deg)}
+  95%{transform:translate(3px,-1px) skewX(-4deg)}
+  96%{transform:translate(-2px,0) skewX(2deg)}
+  97%{transform:translateY(0) skewX(0)}
+}
+.hero-title:hover .ch{animation-play-state:paused,paused}
 .hero-ghost{
   position:absolute;top:-52px;left:-10px;z-index:-1;
   font-size:clamp(52px,10vw,130px);font-weight:900;letter-spacing:.06em;
@@ -178,15 +200,6 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
 }
 @keyframes ghostFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .hero-sub{margin-top:22px;color:var(--muted);font-size:16.5px;line-height:1.7;max-width:580px}
-.hero-terminal{
-  display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;
-  margin-top:20px;padding:10px 16px;border-radius:12px;
-  background:rgba(10,8,14,.8);border:1px solid var(--line);
-  font-size:12.5px;color:#b7adb5;max-width:100%;
-}
-.hero-terminal .prompt{color:var(--red)}
-#typeTarget{color:#d8ced5}
-.type-cursor{color:var(--red);animation:blink .9s steps(1) infinite}
 .hero-cta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
 .hero-ecg{position:absolute;left:0;right:0;bottom:26px;height:120px;opacity:.8;pointer-events:none}
 .hero-ecg svg{width:100%;height:100%}
@@ -454,7 +467,7 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
-  .hero-title .ch,.hero-title em .ch{opacity:1;transform:none}
+  .hero-title .ch,.hero-title em .ch{opacity:1}
 }
 
 
@@ -484,8 +497,9 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
 <meta name="twitter:title" content="HEARTBLEED — VPN-конфиги и Telegram-прокси">
 <meta name="twitter:description" content="VPN-конфиги и Telegram-прокси в один клик.">
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5c74'/%3E%3Cstop offset='.55' stop-color='%23e01b34'/%3E%3Cstop offset='1' stop-color='%237a0213'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='%2308070a'/%3E%3Cpath d='M50 76 C27 59 17 46 17 34.5 C17 23.7 25 16 35.5 16 C41.7 16 46.6 18.9 50 24.5 C53.4 18.9 58.3 16 64.5 16 C75 16 83 23.7 83 34.5 C83 46 73 59 50 76 Z' fill='url(%23g)'/%3E%3Cpath d='M50 76 C50 76 47 84 47 87.5 C47 89.4 48.3 90.5 50 90.5 C51.7 90.5 53 89.4 53 87.5 C53 84 50 76 50 76 Z' fill='%23c1121f'/%3E%3Cellipse cx='38' cy='29' rx='7' ry='4' fill='%23ffffff' opacity='.3' transform='rotate(-25 38 29)'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5c74'/%3E%3Cstop offset='.55' stop-color='%23e01b34'/%3E%3Cstop offset='1' stop-color='%237a0213'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='%2308070a'/%3E%3Cpath d='M50 76 C27 59 17 46 17 34.5 C17 23.7 25 16 35.5 16 C41.7 16 46.6 18.9 50 24.5 C53.4 18.9 58.3 16 64.5 16 C75 16 83 23.7 83 34.5 C83 46 73 59 50 76 Z' fill='url(%23g)'/%3E%3Cpath d='M50 76 C50 76 47 84 47 87.5 C47 89.4 48.3 90.5 50 90.5 C51.7 90.5 53 89.4 53 87.5 C53 84 50 76 50 76 Z' fill='%23c1121f'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3Cpath%20d='M50%2078C50%2078%2047%2085%2047%2088%2047%2089.7%2048.3%2091%2050%2091%2051.7%2091%2053%2089.7%2053%2088%2053%2085%2050%2078%2050%2078Z'%20fill='%237a0213'/%3E%3Cpath%20d='M38%2027C40%2025%2043%2025%2045%2027'%20stroke='%23ff8095'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'%20opacity='.8'/%3E%3C/svg%3E">
+<link rel="alternate icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3Cpath%20d='M50%2078C50%2078%2047%2085%2047%2088%2047%2089.7%2048.3%2091%2050%2091%2051.7%2091%2053%2089.7%2053%2088%2053%2085%2050%2078%2050%2078Z'%20fill='%237a0213'/%3E%3C/svg%3E">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-400-normal.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-700-normal.css">
@@ -561,7 +575,6 @@ h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
       Бесплатные подборки конфигов для импорта в happ, v2rayN и другие VPN-клиенты,
       а также живые Telegram-прокси. Нажал — и ты в сети.
     </p>
-    <div class="hero-terminal mono reveal"><span class="prompt">heartbleed:~$</span> <span id="typeTarget"></span><span class="type-cursor">▌</span></div>
     <div class="hero-cta reveal">
       <a href="#configs" class="btn btn-primary">
         Выбрать конфиг
@@ -1154,46 +1167,6 @@ function toast(msg) {
   }
 })();
 
-(function initTypewriter(){
-  const target = document.getElementById('typeTarget');
-  if (!target) return;
-  const lines = [
-    'свобода не должна быть ограничена',
-    'интернет без границ — по умолчанию',
-    'доступ к информации — базовое право',
-    'интернет задумывался свободным',
-    'один клик — и ты снова в свободной сети ♥',
-  ];
-  let lineIdx = 0;
-  let charIdx = 0;
-  let deleting = false;
-
-  function tick() {
-    const current = lines[lineIdx];
-    if (!deleting) {
-      charIdx++;
-      target.textContent = current.slice(0, charIdx);
-      if (charIdx === current.length) {
-        deleting = true;
-        setTimeout(tick, 2600);
-        return;
-      }
-      setTimeout(tick, 55 + Math.random() * 55);
-    } else {
-      charIdx--;
-      target.textContent = current.slice(0, charIdx);
-      if (charIdx === 0) {
-        deleting = false;
-        lineIdx = (lineIdx + 1) % lines.length;
-        setTimeout(tick, 400);
-        return;
-      }
-      setTimeout(tick, 28);
-    }
-  }
-  setTimeout(tick, 1200);
-})();
-
 const io = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
@@ -1237,4 +1210,3 @@ observeReveals();
               </script>
                         </body>
                         </html>
-                    
