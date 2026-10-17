@@ -21,6 +21,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Heartbleed VPN — конфиги и Telegram-прокси в один клик">
 <meta name="twitter:description" content="Скопировал ссылку — подключился. Бесплатно, без регистрации.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff8093'/%3E%3Cstop offset='1' stop-color='%238f0f24'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M16 28S5 21.2 5 13.6C5 10 7.9 7 11.5 7c1.9 0 3.6 1 4.5 2.5C16.9 8 18.6 7 20.5 7 24.1 7 27 10 27 13.6 27 21.2 16 28 16 28Z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@latest/400.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@latest/700.css">
@@ -60,7 +61,8 @@ header{position:sticky;top:0;z-index:9000;background:rgba(8,5,10,.86);backdrop-f
 .hero{position:relative;padding:56px 0 40px;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:-20% -10% auto -10%;height:560px;pointer-events:none;background:radial-gradient(60% 55% at 20% 25%,rgba(140,15,28,.3),transparent 70%),radial-gradient(45% 45% at 85% 10%,rgba(255,45,63,.12),transparent 70%);filter:blur(6px)}
 .hero::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(67,32,42,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(67,32,42,.16) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 75%)}
-.hero .wrap{position:relative;z-index:2;max-width:860px}
+.hero .wrap{position:relative;z-index:2}
+.herobox{max-width:900px;margin:0}
 .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#150c10;padding:5px 11px;border-radius:99px;font-size:11.5px;color:var(--mut);letter-spacing:.4px}
 .badge i{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.6s infinite;font-style:normal}
 @keyframes pulse{50%{opacity:.3;box-shadow:0 0 3px var(--blood)}}
@@ -194,6 +196,7 @@ section{padding:34px 0 40px}.hero{padding:36px 0 26px}.wrap{padding:0 16px}.fgri
 
 <div class="hero">
 <div class="wrap">
+<div class="herobox">
 <span class="badge"><i></i> бесплатно · happ / v2rayN и другие клиенты</span>
 <h1><span class="word1" data-t="VPN-КОНФИГИ">VPN-КОНФИГИ</span><span class="word2">В ОДИН КЛИК</span></h1>
 <span class="titleline" aria-hidden="true"></span>
@@ -207,6 +210,7 @@ section{padding:34px 0 40px}.hero{padding:36px 0 26px}.wrap{padding:0 16px}.fgri
 <div class="ecgrow">
 <canvas id="ecg" width="360" height="64" aria-hidden="true"></canvas>
 <span>heartbleed-vpn.ru — <span class="st">● online</span> · ♥ <span id="bpm">72</span> bpm</span>
+</div>
 </div>
 </div>
 </div>
@@ -311,12 +315,12 @@ section{padding:34px 0 40px}.hero{padding:36px 0 26px}.wrap{padding:0 16px}.fgri
 <script>
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const PROXIES=[
-{s:'tundra.maggic.biz',p:443,x:'ee0b5cdd0b832ddb62d7dcdbc0cff5772074756e6472612e6d61676769632e62697a'},
-{s:'s22.bopen.bond',p:443,x:'ee536866c85caff869a1b2699defc900827332322e626f70656e2e626f6e64'},
-{s:'s23.bopen.bond',p:443,x:'ee1b26562dff034e5aad0530b21ac768237332332e626f70656e2e626f6e64'},
-{s:'x.shmelproxy.top',p:443,x:'eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275'},
-{s:'3.mtprotonewrunningproxasia.info',p:8443,x:'eeNEgYdJvXrFGRMCIMJdCQ'},
-{s:'behind.thedawnmist.info',p:8443,x:'eeNEgYdJvXrFGRMCIMJdCQ'}];
+{link:'tg://proxy?server=tundra.maggic.biz&port=443&secret=ee0b5cdd0b832ddb62d7dcdbc0cff5772074756e6472612e6d61676769632e62697a'},
+{link:'tg://proxy?server=s22.bopen.bond&port=443&secret=ee536866c85caff869a1b2699defc900827332322e626f70656e2e626f6e64'},
+{link:'tg://proxy?server=s23.bopen.bond&port=443&secret=ee1b26562dff034e5aad0530b21ac768237332332e626f70656e2e626f6e64'},
+{link:'tg://proxy?server=x.shmelproxy.top&port=443&secret=eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275'},
+{link:'tg://proxy?server=3.mtprotonewrunningproxasia.info&port=8443&secret=eeNEgYdJvXrFGRMCIMJdCQ'},
+{link:'tg://proxy?server=behind.thedawnmist.info&port=8443&secret=eeNEgYdJvXrFGRMCIMJdCQ'}];
 const CONFIGS=[
 {id:'black-ss-all',name:'BLACK SS + All RUS',type:'Shadowsocks',tags:['BLACK','SS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt',desc:'Чёрный режим на Shadowsocks: весь трафик идёт через VPN, кроме российских сервисов. Ключи для всех регионов РФ.'},
 {id:'black-ss-weak-dpi',name:'BLACK SS · Weak DPI',type:'Shadowsocks',tags:['BLACK','SS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS_WEAK_DPI_RUS.txt',desc:'Подборка для провайдеров со слабым DPI: Shadowsocks-ключи, которые стабильно работают там, где другие отваливаются.'},
@@ -330,11 +334,9 @@ function renderCfg(f='all'){
  const l=CONFIGS.filter(c=>f==='all'||c.tags.includes(f));
  $('#cfggrid').innerHTML=l.length?l.map(c=>`<div class="cfg rv in"><div class="top">${c.tags.map(t=>`<span class="tg">${t}</span>`).join('')}<span class="tp">${c.type} · для happ / v2rayN</span></div><h3>${c.name}</h3><p>${c.desc}</p><button class="copy" data-copy-val="${c.url}">скопировать ссылку</button></div>`).join(''):'<div class="empty"><b>♥</b>Ничего не найдено. Сердце разрывается…</div>';
 }
+function pxHost(l){try{return new URL(l).searchParams.get('server')||l}catch(e){return l}}
 function renderPx(){
- $('#pxlist').innerHTML=PROXIES.length?PROXIES.map((p,i)=>{
-  const q=`server=${encodeURIComponent(p.s)}&port=${p.p}&secret=${encodeURIComponent(p.x)}`;
-  return `<div class="px rv in"><span class="idx">PROXY ${String(i+1).padStart(2,'0')} · MTProto</span><span class="t"><b>${p.s}</b><span class="d">порт: ${p.p} · нажми — прокси подключится в Telegram</span></span><a class="go" href="https://t.me/proxy?${q}" target="_blank" rel="noopener">подключить ✈</a><button class="copy" data-copy-val="tg://proxy?${q}">copy</button></div>`;
- }).join(''):'<div class="empty"><b>♥</b>Сейчас пусто. Сердце разрывается… свежие прокси всегда на mtproxy.tg ниже.</div>';
+ $('#pxlist').innerHTML=PROXIES.length?PROXIES.map((p,i)=>`<div class="px rv in"><span class="idx">PROXY ${String(i+1).padStart(2,'0')} · MTProto</span><span class="t"><b>${pxHost(p.link)}</b><span class="d">порт: ${(p.link.match(/port=(\d+)/)||[])[1]||''} · нажми — прокси подключится в Telegram</span></span><a class="go" href="${p.link}">подключить ✈</a><button class="copy" data-copy-val="${p.link}">copy</button></div>`).join(''):'<div class="empty"><b>♥</b>Сейчас пусто. Сердце разрывается… свежие прокси всегда на mtproxy.tg ниже.</div>';
 }
 renderCfg();renderPx();
 const toast=$('#toast');let tt;
