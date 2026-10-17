@@ -1,1212 +1,369 @@
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                body {
-                  background-color: white; /* Ensure the iframe has a white background */
-                }
-
-                :root{
-  --bg:      #08070a;
-  --bg-2:    #0d0b10;
-  --card:    #121016;
-  --card-2:  #17141c;
-  --line:    rgba(255,46,77,.14);
-  --red:     #ff2e4d;
-  --blood:   #c1121f;
-  --deep:    #7a0213;
-  --text:    #f3eef0;
-  --muted:   #9a9098;
-  --btn-text:#e4d9dc;
-  --radius:  18px;
-  --glow:    0 0 40px rgba(255,46,77,.25);
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Manrope',sans-serif;
-  overflow-x:hidden;
-  min-height:100vh;
-}
-.mono{font-family:'JetBrains Mono',monospace}
-::selection{background:var(--blood);color:#fff}
-::-webkit-scrollbar{width:10px}
-::-webkit-scrollbar-track{background:var(--bg-2)}
-::-webkit-scrollbar-thumb{background:linear-gradient(var(--blood),var(--deep));border-radius:8px}
-
-h1,h2,h3,.logo-text,.section-kicker{font-family:'Unbounded',sans-serif}
-
-.cursor-glow{
-  position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:-1;
-  background:radial-gradient(circle,rgba(255,46,77,.07),transparent 65%);
-  transform:translate(-50%,-50%);left:50vw;top:40vh;
-  transition:left .5s ease-out,top .5s ease-out;
-}
-
-.bg-layer{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
-  radial-gradient(1200px 800px at 80% -10%, rgba(122,2,19,.22), transparent 60%),
-  radial-gradient(900px 700px at -10% 40%, rgba(193,18,31,.12), transparent 55%),
-  var(--bg);}
-.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:blobMove 22s ease-in-out infinite alternate}
-.blob-1{width:520px;height:520px;background:radial-gradient(circle,rgba(255,46,77,.28),transparent 70%);top:-140px;right:-100px}
-.blob-2{width:420px;height:420px;background:radial-gradient(circle,rgba(122,2,19,.35),transparent 70%);bottom:-120px;left:-80px;animation-delay:-7s}
-.blob-3{width:300px;height:300px;background:radial-gradient(circle,rgba(193,18,31,.2),transparent 70%);top:45%;left:55%;animation-delay:-14s}
-@keyframes blobMove{
-  0%{transform:translate(0,0) scale(1)}
-  50%{transform:translate(-40px,30px) scale(1.12)}
-  100%{transform:translate(30px,-40px) scale(.95)}
-}
-.noise{position:absolute;inset:-50%;opacity:.05;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='120'%20height='120'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect%20width='120'%20height='120'%20filter='url(%23n)'%20opacity='0.6'/%3E%3C/svg%3E");
-  animation:noiseShift .4s steps(3) infinite;}
-@keyframes noiseShift{0%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}100%{transform:translate(0,0)}}
-.particles span{
-  position:absolute;bottom:-12px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #ff5c74, var(--blood) 60%, transparent);
-  opacity:0;animation:riseUp linear infinite;
-}
-@keyframes riseUp{
-  0%{transform:translateY(0) scale(.6);opacity:0}
-  12%{opacity:.7}
-  90%{opacity:.25}
-  100%{transform:translateY(-105vh) scale(1.05);opacity:0}
-}
-
-.nav{
-  position:sticky;top:0;z-index:60;
-  display:flex;align-items:center;gap:28px;
-  padding:16px 5vw;
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  background:rgba(8,7,10,.55);
-  border-bottom:1px solid transparent;
-  transition:border-color .35s, background .35s, box-shadow .35s;
-}
-.nav.scrolled{border-bottom-color:var(--line);background:rgba(8,7,10,.82);box-shadow:0 10px 40px rgba(0,0,0,.5)}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
-.logo-heart{width:30px;height:30px;filter:drop-shadow(0 0 10px rgba(255,46,77,.55));animation:heartbeat 2.2s ease-in-out infinite}
-@keyframes heartbeat{
-  0%,100%{transform:scale(1)}
-  8%{transform:scale(1.14)}
-  16%{transform:scale(1)}
-  24%{transform:scale(1.09)}
-  32%{transform:scale(1)}
-}
-.logo-drip{animation:drip 2.2s ease-in infinite}
-@keyframes drip{0%,60%{opacity:0;transform:translateY(-4px)}70%{opacity:1}100%{opacity:0;transform:translateY(6px)}}
-.logo-text{font-weight:700;font-size:17px;letter-spacing:.14em}
-.logo-text em{font-style:normal;color:var(--red)}
-.nav-links{display:flex;gap:26px;margin-left:14px}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.04em;
-  position:relative;padding:4px 0;transition:color .3s;
-}
-.nav-links a::after{
-  content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;
-  background:linear-gradient(90deg,var(--red),var(--blood));
-  transition:width .3s;border-radius:2px;box-shadow:0 0 8px rgba(255,46,77,.6);
-}
-.nav-links a:hover{color:var(--text)}
-.nav-links a:hover::after{width:100%}
-.nav-actions{margin-left:auto;display:flex;align-items:center;gap:14px}
-.search-box{
-  display:flex;align-items:center;gap:8px;
-  background:var(--card);border:1px solid var(--line);
-  padding:9px 14px;border-radius:12px;transition:border-color .3s, box-shadow .3s;
-}
-.search-box:focus-within{border-color:rgba(255,46,77,.5);box-shadow:0 0 0 3px rgba(255,46,77,.12)}
-.search-box svg{width:16px;height:16px;color:var(--muted);flex-shrink:0}
-.search-box input{
-  background:none;border:none;outline:none;color:var(--text);
-  font-family:'Manrope',sans-serif;font-size:13.5px;width:170px;
-}
-.search-box input::placeholder{color:#6d656e}
-.tg-btn-nav{
-  display:grid;place-items:center;width:42px;height:42px;border-radius:12px;
-  background:var(--card);border:1px solid var(--line);color:var(--text);
-  transition:all .3s;text-decoration:none;
-}
-.tg-btn-nav svg{width:19px;height:19px;transition:transform .3s}
-.tg-btn-nav:hover{border-color:rgba(255,46,77,.55);box-shadow:var(--glow);transform:translateY(-2px);color:var(--red)}
-.tg-btn-nav:hover svg{transform:rotate(-12deg) scale(1.12)}
-.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
-.burger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
-
-.hero{position:relative;min-height:84vh;display:flex;align-items:center;padding:40px 5vw 150px}
-.hero-inner{max-width:820px}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:10px;
-  border:1px solid var(--line);background:rgba(193,18,31,.08);
-  padding:8px 16px;border-radius:100px;font-size:12.5px;font-weight:600;letter-spacing:.06em;
-  color:#e8b9c0;margin:-14px 0 14px -22px;
-}
-.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:blink 1.6s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-
-.hero-title{
-  position:relative;font-size:clamp(30px,5.2vw,60px);font-weight:900;line-height:1.16;letter-spacing:.02em;
-}
-.hero-title .ch{
-  display:inline-block;white-space:pre;
-  opacity:0;
-  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both,
-            charFloat 4.2s ease-in-out infinite;
-  animation-delay:calc(var(--i) * 42ms + .25s),
-                   calc(var(--i) * 90ms + 1.4s);
-}
-@keyframes charIn{
-  0%{opacity:0;transform:translateY(34px) rotate(6deg) scale(.9)}
-  60%{opacity:1;transform:translateY(-5px) rotate(-1.5deg) scale(1.04)}
-  100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}
-}
-@keyframes charFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-.hero-title em{font-style:normal;color:var(--red)}
-.hero-title em .ch{
-  background:linear-gradient(180deg,#ff8095 0%,#ff2e4d 30%,#c1121f 60%,#ff2e4d 85%,#ff8095 100%);
-  background-size:100% 300%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 18px rgba(255,46,77,.4));
-  animation:charIn .7s cubic-bezier(.22,.9,.3,1) both,
-            charFloat 4.2s ease-in-out infinite,
-            emShine 4s linear infinite,
-            emGlitch 7s steps(1) infinite;
-  animation-delay:calc(var(--i) * 42ms + .25s),
-                   calc(var(--i) * 90ms + 1.4s),
-                   calc(var(--i) * 60ms),
-                   calc(var(--i) * 130ms + 3s);
-}
-@keyframes emShine{to{background-position:0 -300%}}
-@keyframes emGlitch{
-  0%,93%,100%{transform:translateY(0) skewX(0)}
-  94%{transform:translate(-3px,1px) skewX(4deg)}
-  95%{transform:translate(3px,-1px) skewX(-4deg)}
-  96%{transform:translate(-2px,0) skewX(2deg)}
-  97%{transform:translateY(0) skewX(0)}
-}
-.hero-title:hover .ch{animation-play-state:paused,paused}
-.hero-ghost{
-  position:absolute;top:-52px;left:-10px;z-index:-1;
-  font-size:clamp(52px,10vw,130px);font-weight:900;letter-spacing:.06em;
-  color:transparent;-webkit-text-stroke:1px rgba(255,46,77,.12);
-  user-select:none;pointer-events:none;white-space:nowrap;
-  animation:ghostFloat 7s ease-in-out infinite;
-}
-@keyframes ghostFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.hero-sub{margin-top:22px;color:var(--muted);font-size:16.5px;line-height:1.7;max-width:580px}
-.hero-cta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap}
-.hero-ecg{position:absolute;left:0;right:0;bottom:26px;height:120px;opacity:.8;pointer-events:none}
-.hero-ecg svg{width:100%;height:100%}
-.ecg-line,.ecg-glow{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ecg-glow{stroke:rgba(255,46,77,.35);stroke-width:6;filter:blur(4px)}
-.ecg-line{stroke:var(--red);stroke-width:2;stroke-dasharray:2600;stroke-dashoffset:2600;animation:ecg 4s linear infinite}
-@keyframes ecg{0%{stroke-dashoffset:2600}70%,100%{stroke-dashoffset:0}}
-
-.btn{
-  position:relative;overflow:hidden;
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-decoration:none;
-  font-family:'Manrope',sans-serif;font-size:14.5px;font-weight:800;letter-spacing:.01em;
-  padding:15px 30px;border-radius:14px;border:1px solid transparent;transition:all .3s;
-}
-.btn svg{width:17px;height:17px}
-.btn-primary{
-  color:var(--btn-text);background:linear-gradient(135deg,#e01b34,var(--deep));
-  box-shadow:0 8px 26px rgba(193,18,31,.35), inset 0 1px 0 rgba(255,255,255,.15);
-}
-.btn-primary::after{
-  content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.18),transparent);
-  transform:skewX(-20deg);animation:btnShine 3.4s ease-in-out infinite;pointer-events:none;
-}
-@keyframes btnShine{0%{left:-80%}45%{left:140%}100%{left:140%}}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(255,46,77,.45), inset 0 1px 0 rgba(255,255,255,.2)}
-.btn-ghost{color:var(--text);border-color:var(--line);background:rgba(255,255,255,.02)}
-.btn-ghost:hover{border-color:rgba(255,46,77,.55);box-shadow:var(--glow);transform:translateY(-3px)}
-.btn-sm{padding:12px 20px;font-size:13px;border-radius:12px}
-.btn.loading{pointer-events:none;opacity:.65}
-.btn.copied{
-  background:linear-gradient(135deg,#33543f,#1c2f24);
-  box-shadow:0 8px 26px rgba(30,60,40,.3), inset 0 1px 0 rgba(255,255,255,.06);
-  color:#cfe0d4;
-}
-
-.howto{padding:20px 5vw 30px}
-.steps{display:flex;align-items:stretch;gap:16px;flex-wrap:wrap}
-.step{
-  flex:1;min-width:220px;
-  background:linear-gradient(160deg,var(--card-2),var(--card));
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:26px 24px;transition:transform .35s, box-shadow .35s, border-color .35s;
-}
-.step:hover{transform:translateY(-6px);border-color:rgba(255,46,77,.4);box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 26px rgba(255,46,77,.12)}
-.step-num{
-  font-family:'Unbounded';font-size:30px;font-weight:900;
-  background:linear-gradient(135deg,#ff5c74,var(--blood));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  display:block;margin-bottom:14px;
-}
-.step h4{font-size:15.5px;font-weight:800;margin-bottom:8px}
-.step p{font-size:13.5px;color:var(--muted);line-height:1.6}
-.step-arrow{align-self:center;color:var(--red);font-size:22px;opacity:.6;text-shadow:0 0 12px rgba(255,46,77,.6);animation:arrowPulse 1.8s ease-in-out infinite}
-@keyframes arrowPulse{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(5px);opacity:.9}}
-
-.catalog{padding:50px 5vw 90px}
-.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:38px}
-.section-kicker{font-size:12px;font-weight:400;letter-spacing:.3em;color:var(--red)}
-.section-title{font-size:clamp(24px,3.2vw,38px);font-weight:900;letter-spacing:.03em;margin-top:8px}
-.section-title em{font-style:normal;color:var(--red);text-shadow:0 0 24px rgba(255,46,77,.45)}
-.section-note{font-size:12px;color:var(--muted);letter-spacing:.04em;padding-bottom:6px}
-.filters{display:flex;gap:10px;flex-wrap:wrap}
-.filter-pill{
-  font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:700;letter-spacing:.06em;
-  color:var(--muted);background:var(--card);border:1px solid var(--line);
-  padding:10px 20px;border-radius:100px;cursor:pointer;transition:all .3s;text-transform:uppercase;
-}
-.filter-pill:hover{color:var(--text);border-color:rgba(255,46,77,.4)}
-.filter-pill.active{
-  color:#fff;background:linear-gradient(135deg,var(--blood),var(--deep));
-  border-color:transparent;box-shadow:0 6px 20px rgba(193,18,31,.4);
-}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
-
-.card{
-  position:relative;background:linear-gradient(160deg,var(--card-2),var(--card));
-  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
-  transition:transform .4s cubic-bezier(.2,.8,.25,1), box-shadow .4s, border-color .4s;
-  display:flex;flex-direction:column;
-}
-.card::before{
-  content:"";position:absolute;inset:0;border-radius:var(--radius);padding:1px;pointer-events:none;
-  background:linear-gradient(140deg,rgba(255,46,77,.6),transparent 40%,transparent 60%,rgba(122,2,19,.5));
-  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;mask-composite:exclude;
-  opacity:0;transition:opacity .4s;z-index:3;
-}
-.card:hover{transform:translateY(-8px);box-shadow:0 22px 50px rgba(0,0,0,.55),0 0 34px rgba(255,46,77,.16)}
-.card:hover::before{opacity:1}
-.card-art{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0a0810}
-.card-art>svg{width:100%;height:100%;display:block;transition:transform .6s cubic-bezier(.2,.8,.25,1)}
-.card:hover .card-art>svg{transform:scale(1.07)}
-.card-art::after{
-  content:"";position:absolute;top:0;left:-80%;width:45%;height:100%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.09),transparent);
-  transform:skewX(-20deg);transition:left .65s ease;pointer-events:none;
-}
-.card:hover .card-art::after{left:150%}
-.chips{position:absolute;top:12px;left:12px;z-index:2;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
-.chip{
-  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.14em;
-  padding:5px 10px;border-radius:7px;text-transform:uppercase;backdrop-filter:blur(6px);
-}
-.chip.black{background:rgba(10,6,10,.7);border:1px solid rgba(255,46,77,.55);color:#ff8095}
-.chip.white{background:rgba(243,238,240,.1);border:1px solid rgba(243,238,240,.35);color:var(--text)}
-.chip.mobile{background:rgba(122,2,19,.45);border:1px solid rgba(193,18,31,.7);color:#ffb3bf}
-.chip.proto{background:rgba(255,46,77,.16);border:1px solid rgba(255,46,77,.4);color:#ff8095}
-.card-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
-.card-cat{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:700}
-.card-name{font-size:15.5px;font-weight:800;margin:7px 0 6px;line-height:1.4}
-.card-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;flex:1}
-.card-row{display:flex;gap:10px;align-items:center}
-.card-row .btn{flex:1}
-.icon-btn{
-  background:var(--bg-2);border:1px solid var(--line);color:var(--muted);
-  width:40px;height:40px;border-radius:11px;cursor:pointer;display:grid;place-items:center;
-  transition:all .25s;flex-shrink:0;
-}
-.icon-btn svg{width:17px;height:17px}
-.icon-btn:hover{border-color:rgba(255,46,77,.55);color:var(--red);box-shadow:0 0 16px rgba(255,46,77,.2);transform:translateY(-2px)}
-
-.empty-state{text-align:center;padding:70px 0;color:var(--muted)}
-.empty-state svg{width:90px;height:90px;margin-bottom:18px;opacity:.7}
-.empty-state p{font-size:15px}
-
-.proxy-section{padding-top:10px}
-.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.proxy-card{
-  position:relative;overflow:hidden;
-  background:linear-gradient(160deg,var(--card-2),var(--card));
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:20px;transition:transform .35s, box-shadow .35s, border-color .35s;
-}
-.proxy-card::after{
-  content:"";position:absolute;top:0;left:-80%;width:45%;height:100%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);
-  transform:skewX(-20deg);transition:left .65s ease;pointer-events:none;
-}
-.proxy-card:hover::after{left:150%}
-.proxy-card:hover{transform:translateY(-6px);border-color:rgba(255,46,77,.45);box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 28px rgba(255,46,77,.14)}
-.proxy-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.proxy-num{font-size:11px;font-weight:700;letter-spacing:.22em;color:var(--red)}
-.proxy-status{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;letter-spacing:.14em;color:#7fc98f;text-transform:uppercase}
-.proxy-status .dot{width:7px;height:7px;border-radius:50%;background:#43c95f;box-shadow:0 0 10px rgba(67,201,95,.8);animation:blink 1.8s infinite}
-.proxy-server{
-  font-size:13px;font-weight:700;color:var(--text);word-break:break-all;
-  padding:11px 14px;border-radius:10px;background:#0a0810;border:1px solid var(--line);
-  margin-bottom:8px;
-}
-.proxy-port{font-size:11.5px;color:var(--muted);margin-bottom:16px;display:block}
-.proxy-port b{color:#e8b9c0;font-weight:700}
-.proxy-actions{display:flex;gap:10px}
-.proxy-connect{
-  flex:1;display:inline-flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;
-  font-family:'Manrope',sans-serif;font-size:13.5px;font-weight:800;letter-spacing:.02em;
-  padding:12px 18px;border-radius:12px;color:var(--btn-text);
-  background:linear-gradient(135deg,#e01b34,var(--deep));
-  box-shadow:0 6px 20px rgba(193,18,31,.35), inset 0 1px 0 rgba(255,255,255,.15);
-  transition:all .3s;position:relative;overflow:hidden;
-}
-.proxy-connect svg{width:15px;height:15px;transition:transform .3s}
-.proxy-connect:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,46,77,.45)}
-.proxy-connect:hover svg{transform:rotate(-12deg) scale(1.15)}
-.proxy-fallback{
-  margin-top:26px;text-align:center;font-size:13px;color:var(--muted);
-  border:1px dashed rgba(255,46,77,.3);border-radius:14px;padding:16px 20px;
-  background:rgba(193,18,31,.05);
-}
-.proxy-fallback .heart{color:var(--red);animation:heartbeat 2.2s ease-in-out infinite;display:inline-block}
-.proxy-fallback a{color:#ff8095;text-decoration:none;font-weight:700;border-bottom:1px solid rgba(255,128,149,.35);transition:color .25s,border-color .25s}
-.proxy-fallback a:hover{color:var(--red);border-color:var(--red)}
-.proxy-fallback .sep{margin:0 8px;color:#5d5560}
-
-.promo{padding:20px 5vw 90px}
-.promo-card{
-  position:relative;overflow:hidden;text-align:center;
-  border:1px solid var(--line);border-radius:26px;padding:44px 8vw 54px;
-  background:linear-gradient(160deg,rgba(122,2,19,.18),rgba(18,16,22,.9));
-}
-.promo-bg{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(600px 300px at 50% 120%, rgba(255,46,77,.25), transparent 65%);
-  animation:promoBreath 5s ease-in-out infinite;}
-@keyframes promoBreath{0%,100%{opacity:.7}50%{opacity:1}}
-.promo-card h2{font-size:clamp(24px,3.6vw,42px);font-weight:900;margin:14px 0 16px;letter-spacing:.03em}
-.promo-card h2 em{font-style:normal;color:var(--red);text-shadow:0 0 26px rgba(255,46,77,.5)}
-.promo-card p{color:var(--muted);max-width:540px;margin:0 auto;line-height:1.7}
-.promo-card p b{color:var(--text)}
-.promo-cta{display:flex;gap:14px;justify-content:center;margin-top:28px;flex-wrap:wrap}
-
-.footer{border-top:1px solid var(--line);background:rgba(10,8,12,.7);padding:60px 5vw 54px}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
-.footer-brand p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-top:16px;max-width:300px}
-.footer-col h4{font-family:'Unbounded';font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
-.footer-col a{display:block;color:var(--muted);text-decoration:none;font-size:14px;margin-bottom:11px;transition:color .25s,transform .25s}
-.footer-col a:hover{color:var(--text);transform:translateX(4px)}
-
-.modal{
-  position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:4vh 4vw;
-  background:rgba(4,3,6,.72);backdrop-filter:blur(6px);
-  opacity:0;pointer-events:none;transition:opacity .3s;
-}
-.modal.open{opacity:1;pointer-events:auto}
-.modal-panel{
-  width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;
-  background:linear-gradient(180deg,var(--card-2),var(--bg-2));
-  border:1px solid rgba(255,46,77,.3);border-radius:20px;overflow:hidden;
-  box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 50px rgba(255,46,77,.12);
-  transform:translateY(24px) scale(.97);transition:transform .35s cubic-bezier(.2,.8,.25,1);
-}
-.modal.open .modal-panel{transform:translateY(0) scale(1)}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px;border-bottom:1px solid var(--line)}
-.modal-head h3{font-size:15px;font-weight:700;margin-top:6px;letter-spacing:.02em}
-.close-btn{background:var(--card);border:1px solid var(--line);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:14px;transition:all .25s;flex-shrink:0}
-.close-btn:hover{border-color:rgba(255,46,77,.55);color:var(--red);transform:rotate(90deg)}
-.pre-box{
-  flex:1;overflow:auto;margin:0;padding:18px 24px;
-  font-size:11.5px;line-height:1.75;color:#c9bfc6;
-  background:#0a0810;border-bottom:1px solid var(--line);
-  white-space:pre-wrap;word-break:break-all;
-  min-height:200px;
-}
-.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 24px}
-.modal-foot span{font-size:11.5px;color:var(--muted)}
-
-.toasts{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none}
-.toast{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(23,20,28,.92);border:1px solid rgba(255,46,77,.4);
-  backdrop-filter:blur(10px);
-  padding:13px 22px;border-radius:14px;font-size:13.5px;font-weight:600;
-  box-shadow:0 12px 34px rgba(0,0,0,.55),0 0 20px rgba(255,46,77,.15);
-  animation:toastIn .35s cubic-bezier(.2,.8,.25,1), toastOut .35s ease 2.4s forwards;
-  max-width:90vw;
-}
-.toast .heart{color:var(--red);font-size:15px}
-@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastOut{to{opacity:0;transform:translateY(12px) scale(.95)}}
-
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.25,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-@media (max-width:960px){
-  .nav-links{display:none}
-  .nav-links.open{
-    display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;
-    background:rgba(10,8,12,.97);padding:22px 5vw;gap:18px;border-bottom:1px solid var(--line);
-  }
-  .burger{display:flex}
-  .search-box input{width:110px}
-  .hero{min-height:72vh;padding-top:30px}
-  .hero-ghost{display:none}
-  .hero-tag{margin-left:-8px}
-  .step-arrow{display:none}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .section-note{display:none}
-}
-@media (max-width:560px){
-  .search-box{display:none}
-  .footer-grid{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr}
-  .hero-tag{margin-left:0}
-  .cursor-glow{display:none}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
-  .hero-title .ch,.hero-title em .ch{opacity:1}
-}
-
-
-              </style>
-                        </head>
-                        <body>
-                            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HEARTBLEED — бесплатные VPN-конфиги и Telegram-прокси</title>
-<meta name="description" content="Бесплатные VPN-конфиги для happ, v2rayN и других клиентов, а также рабочие Telegram-прокси в один клик. Скопировал ссылку — подключился.">
-<meta name="keywords" content="vpn, vpn конфиги, бесплатные vpn, happ, v2rayn, vless, shadowsocks, v2ray, telegram proxy, mtproto proxy, телеграм прокси, vpn для россии, heartbleed">
-<meta name="author" content="heartbleed">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#08070a">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heartbleed VPN — бесплатные VPN-конфиги и Telegram-прокси в один клик</title>
+<meta name="description" content="Бесплатные подборки VPN-конфигов для импорта в happ, v2rayN и другие клиенты, а также живые Telegram-прокси (MTProto). Скопировал ссылку — подключился. От Heartbleed.">
+<meta name="keywords" content="heartbleed vpn, бесплатные vpn конфиги, happ конфиги, v2rayN подписка, telegram прокси, mtproto proxy, vpn конфиги скопировать, heartbleed-vpn.ru">
+<meta name="author" content="Heartbleed">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#08050a">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://heartbleed-vpn.ru/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%26%239829;%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="HEARTBLEED">
-<meta property="og:title" content="HEARTBLEED — VPN-конфиги и Telegram-прокси">
-<meta property="og:description" content="Подборки VPN-конфигов для happ / v2rayN и бесплатные Telegram-прокси. Один клик — и ты в сети.">
+<meta property="og:site_name" content="Heartbleed VPN">
 <meta property="og:locale" content="ru_RU">
-
+<meta property="og:title" content="Heartbleed VPN — конфиги и Telegram-прокси в один клик">
+<meta property="og:description" content="Бесплатные подборки конфигов для happ, v2rayN и других клиентов плюс живые MTProto-прокси. Нажал — и ты в сети.">
+<meta property="og:url" content="https://heartbleed-vpn.ru/">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HEARTBLEED — VPN-конфиги и Telegram-прокси">
-<meta name="twitter:description" content="VPN-конфиги и Telegram-прокси в один клик.">
-
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3Cpath%20d='M50%2078C50%2078%2047%2085%2047%2088%2047%2089.7%2048.3%2091%2050%2091%2051.7%2091%2053%2089.7%2053%2088%2053%2085%2050%2078%2050%2078Z'%20fill='%237a0213'/%3E%3Cpath%20d='M38%2027C40%2025%2043%2025%2045%2027'%20stroke='%23ff8095'%20stroke-width='4'%20stroke-linecap='round'%20fill='none'%20opacity='.8'/%3E%3C/svg%3E">
-<link rel="alternate icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='24'%20fill='%2308070a'/%3E%3Cpath%20d='M50%2078C26%2060%2016%2046%2016%2034.5%2016%2023.7%2024%2016%2034.5%2016%2041%2016%2046.4%2019%2050%2024.5%2053.6%2019%2059%2016%2065.5%2016%2076%2016%2084%2023.7%2084%2034.5%2084%2046%2074%2060%2050%2078Z'%20fill='%23e01b34'/%3E%3Cpath%20d='M50%2078C50%2078%2047%2085%2047%2088%2047%2089.7%2048.3%2091%2050%2091%2051.7%2091%2053%2089.7%2053%2088%2053%2085%2050%2078%2050%2078Z'%20fill='%237a0213'/%3E%3C/svg%3E">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-400-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-700-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/unbounded@latest/cyrillic-900-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-400-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-600-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/manrope@latest/cyrillic-800-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/cyrillic-400-normal.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/cyrillic-700-normal.css">
-<link rel="stylesheet" href="css/style.css">
+<meta name="twitter:title" content="Heartbleed VPN — конфиги и Telegram-прокси в один клик">
+<meta name="twitter:description" content="Скопировал ссылку — подключился. Бесплатно, без регистрации.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@latest/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@latest/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@latest/800.css">
+<style>
+:root{--bg:#08050a;--panel:#110a0d;--panel2:#170e12;--line:#2a1218;--line2:#43202a;--red:#ff2d3f;--red2:#e01b2c;--blood:#8c0f1c;--deep:#4a0810;--rose:#ff7a86;--ice:#39c6ff;--txt:#f4e8ea;--mut:#a68d93;--dim:#6f575e;--warn:#f5b942;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--maxw:1180px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--mono);font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+body::after{content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;background:radial-gradient(120% 80% at 50% 0%,transparent 40%,rgba(0,0,0,.55) 100%)}
+::selection{background:var(--blood);color:#fff}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;font-size:inherit;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#0a0507}
+::-webkit-scrollbar-thumb{background:#31141c;border:2px solid #0a0507;border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--blood)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+.mut{color:var(--mut)}.dim{color:var(--dim)}.red{color:var(--red)}.rose{color:var(--rose)}
+#prog{position:fixed;top:0;left:0;height:2px;width:0;z-index:10000;background:linear-gradient(90deg,var(--deep),var(--red2),var(--red));box-shadow:0 0 12px rgba(255,45,63,.7)}
+header{position:sticky;top:0;z-index:9000;background:rgba(8,5,10,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{max-width:var(--maxw);margin:0 auto;padding:0 22px;height:56px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+.logo .hrt{color:var(--red);animation:beat 1.05s infinite;font-size:15px}
+@keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.28)}24%{transform:scale(1)}36%{transform:scale(1.16)}50%{transform:scale(1)}}
+.logo b{color:var(--txt)}
+.logo .cur{color:var(--red);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.navlinks{display:flex;gap:2px;margin-left:auto;overflow:hidden}
+.navlinks a{padding:6px 10px;font-size:12.3px;color:var(--mut);border:1px solid transparent;border-radius:4px;transition:.18s;white-space:nowrap}
+.navlinks a:hover{color:var(--txt);border-color:var(--line2);background:#150c10}
+.navlinks a.act{color:var(--red);border-color:var(--line2);background:rgba(140,15,28,.12)}
+.navcta{margin-left:8px;padding:8px 14px;font-size:12px;font-weight:700;color:#ffdfe2;background:linear-gradient(180deg,#b3141f,#5c0a14);border:1px solid #7a0d18;border-radius:4px;box-shadow:0 0 8px rgba(140,15,28,.25);transition:.18s;white-space:nowrap}
+.navcta:hover{color:#fff;border-color:var(--red2);box-shadow:0 0 14px rgba(224,27,44,.35)}
+#burger{display:none;margin-left:auto;background:none;border:1px solid var(--line2);border-radius:4px;padding:6px 9px;cursor:pointer;color:var(--red)}
+.hero{position:relative;padding:56px 0 40px;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:-20% -10% auto -10%;height:560px;pointer-events:none;background:radial-gradient(60% 55% at 20% 25%,rgba(140,15,28,.3),transparent 70%),radial-gradient(45% 45% at 85% 10%,rgba(255,45,63,.12),transparent 70%);filter:blur(6px)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(67,32,42,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(67,32,42,.16) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 75%)}
+.hero .wrap{position:relative;z-index:2;max-width:860px}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:#150c10;padding:5px 11px;border-radius:99px;font-size:11.5px;color:var(--mut);letter-spacing:.4px}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.6s infinite;font-style:normal}
+@keyframes pulse{50%{opacity:.3;box-shadow:0 0 3px var(--blood)}}
+h1{margin:18px 0 0;font-size:clamp(38px,6.4vw,72px);line-height:1.05;font-weight:800;letter-spacing:-2px}
+.word1{position:relative;z-index:0;display:inline-block;color:#fff;letter-spacing:-2px;line-height:1.05;animation:glowPulse 6s ease-in-out infinite}
+.word1::before,.word1::after{content:attr(data-t);position:absolute;left:0;top:0;z-index:-1;font:inherit;letter-spacing:-2px;line-height:1.05;white-space:nowrap;pointer-events:none;filter:blur(.6px)}
+.word1::before{color:var(--red);opacity:.5;animation:ghostRed 8s ease-in-out infinite}
+.word1::after{color:var(--ice);opacity:.2;mix-blend-mode:screen;animation:ghostIce 11s ease-in-out infinite}
+@keyframes ghostRed{0%,100%{transform:translate3d(-2px,0,0);opacity:.42}50%{transform:translate3d(-6px,1px,0);opacity:.62}}
+@keyframes ghostIce{0%,100%{transform:translate3d(2px,0,0);opacity:.15}50%{transform:translate3d(6px,-1px,0);opacity:.28}}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 18px rgba(255,45,63,.32)}50%{text-shadow:0 0 34px rgba(255,45,63,.62)}}
+.word2{display:block;color:var(--red);letter-spacing:-2px;font-size:.62em;animation:suiteGlow 6s ease-in-out infinite;animation-delay:.8s}
+@keyframes suiteGlow{0%,100%{text-shadow:0 0 16px rgba(224,27,44,.28)}50%{text-shadow:0 0 30px rgba(255,45,63,.55)}}
+.titleline{display:block;width:min(240px,58%);height:2px;margin-top:16px;border-radius:2px;background:linear-gradient(90deg,var(--red),rgba(140,15,28,.1));transform-origin:left center;animation:lineGlow 6s ease-in-out infinite}
+@keyframes lineGlow{0%,100%{opacity:.5;transform:scaleX(.9)}50%{opacity:1;transform:scaleX(1)}}
+.tag{margin:18px 0 0;font-size:16px;color:var(--txt);font-weight:700}
+.lead{margin:12px 0 0;color:var(--mut);max-width:62ch;font-size:13.5px}
+.hbtns{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:12px 20px;border-radius:5px;font-weight:700;font-size:13px;border:1px solid var(--line2);cursor:pointer;transition:.18s;background:#140b0f;color:var(--txt)}
+.btn:hover{border-color:var(--red);color:#fff;transform:translateY(-1px)}
+.btn.p{background:linear-gradient(180deg,#b3141f,#5c0a14);border-color:#7a0d18;color:#ffe3e5;box-shadow:0 0 14px rgba(140,15,28,.3)}
+.btn.p:hover{color:#fff;border-color:var(--red2);box-shadow:0 0 22px rgba(224,27,44,.4)}
+.ecgrow{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:11.5px;color:var(--dim);flex-wrap:wrap}
+.ecgrow .st{color:var(--red);font-weight:700}
+#ecg{width:180px;height:32px;display:block;opacity:.9}
+.mq{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0d0709;overflow:hidden;position:relative}
+.mq::before,.mq::after{content:'';position:absolute;top:0;bottom:0;width:90px;z-index:2;pointer-events:none}
+.mq::before{left:0;background:linear-gradient(90deg,#0d0709,transparent)}
+.mq::after{right:0;background:linear-gradient(270deg,#0d0709,transparent)}
+.mqin{display:flex;width:max-content;animation:slide 46s linear infinite;padding:10px 0}
+.mq:hover .mqin{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.mqin span{padding:0 26px;font-size:11.8px;letter-spacing:1.5px;color:var(--mut);white-space:nowrap;text-transform:uppercase}
+.mqin span b{color:var(--red)}
+section{padding:46px 0 52px;position:relative}
+.shead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+.snum{font-size:11.5px;color:var(--red);border:1px solid var(--line2);background:#150c10;padding:3px 8px;border-radius:3px;letter-spacing:1px}
+h2{margin:0;font-size:clamp(26px,3.6vw,40px);font-weight:800;letter-spacing:-1px;line-height:1.12}
+h2 em{font-style:normal;color:var(--red)}
+.ssub{color:var(--dim);margin:6px 0 24px;font-size:12.5px;max-width:82ch}
+.drip{height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='24' viewBox='0 0 140 24'%3E%3Cpath d='M0 0h140v4c-7 0-9 5-11 12-2-7-5-12-11-12-8 0-9 13-15 13s-7-13-15-13c-7 0-9 9-13 9s-5-9-13-9c-6 0-8 7-12 7s-5-7-12-7c-6 0-8 5-12 5S5 5 0 5z' fill='%232a0d14'/%3E%3C/svg%3E") repeat-x;opacity:.9}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step{position:relative;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:8px;padding:20px;transition:.22s}
+.step:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.step .n{font-size:34px;font-weight:800;color:var(--blood);letter-spacing:-2px;line-height:1}
+.step:hover .n{color:var(--red)}
+.step h3{margin:10px 0 6px;font-size:15px}
+.step p{margin:0;color:var(--mut);font-size:12.4px}
+.step .ar{position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--red);font-size:16px;z-index:2}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chips button{background:#100a0d;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:11.8px;color:var(--mut);cursor:pointer;transition:.18s}
+.chips button:hover{color:var(--txt);border-color:var(--line2)}
+.chips button.act{color:#fff;border-color:var(--red);background:rgba(140,15,28,.25)}
+.cfggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.cfg{display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:8px;padding:18px;transition:.22s}
+.cfg:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 18px 40px rgba(0,0,0,.55)}
+.cfg .top{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cfg .tg{font-size:9.8px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--line2);border-radius:3px;padding:2px 7px;color:var(--red)}
+.cfg .tp{margin-left:auto;font-size:10.8px;color:var(--dim)}
+.cfg h3{margin:0;font-size:15px;color:#fff}
+.cfg p{margin:0;color:var(--mut);font-size:12.3px;flex:1}
+.cfg .copy{align-self:flex-start}
+.copy{background:#150c10;border:1px solid var(--line2);border-radius:4px;padding:7px 13px;font-size:11px;color:var(--mut);cursor:pointer;transition:.16s;white-space:nowrap}
+.copy:hover{color:#fff;border-color:var(--red)}
+.copy.done{color:var(--rose);border-color:#7d2230}
+.empty{border:1px dashed var(--line2);border-radius:8px;padding:26px;text-align:center;color:var(--dim);font-size:12.5px;grid-column:1/-1;background:repeating-linear-gradient(45deg,rgba(140,15,28,.05) 0 12px,transparent 12px 24px)}
+.empty b{color:var(--red);display:block;font-size:22px;margin-bottom:8px;animation:beat 2s infinite}
+.pxlist{display:flex;flex-direction:column;gap:10px}
+.px{display:flex;align-items:center;gap:14px;background:#0e080b;border:1px solid var(--line);border-left:3px solid var(--blood);border-radius:6px;padding:13px 16px;transition:.2s;flex-wrap:wrap}
+.px:hover{border-left-color:var(--red);background:#130b0e}
+.px .idx{font-size:10.5px;color:var(--dim);letter-spacing:1px;white-space:nowrap}
+.px .t{flex:1;min-width:180px}
+.px b{display:block;font-size:13px;color:#fff}
+.px span.d{display:block;font-size:11.2px;color:var(--dim);margin-top:2px}
+.px .go{color:var(--rose);font-weight:700;font-size:12px;border:1px solid var(--line2);border-radius:4px;padding:7px 13px;transition:.18s}
+.px .go:hover{background:rgba(140,15,28,.25);color:#fff;border-color:var(--red)}
+.fallback{margin-top:16px;border:1px solid var(--line2);border-left:3px solid var(--red);background:#12090c;border-radius:6px;padding:13px 16px;font-size:12.2px;color:var(--mut)}
+.fallback a{color:var(--rose);border-bottom:1px dashed rgba(255,122,134,.4)}
+.fallback a:hover{color:#fff;border-bottom-color:#fff}
+.promo{position:relative;overflow:hidden;border:1px solid #5c1220;background:linear-gradient(180deg,rgba(74,8,16,.42),rgba(14,8,11,.9));border-radius:9px;padding:28px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px;align-items:center}
+.promo::before{content:'✈';position:absolute;right:18px;top:-14px;font-size:110px;color:rgba(255,45,63,.06)}
+.promo h3{margin:0 0 10px;font-size:20px}
+.promo h3 em{font-style:normal;color:var(--red)}
+.promo p{margin:0 0 18px;color:var(--mut);font-size:12.8px;max-width:60ch}
+.promo .acts{display:flex;gap:10px;flex-wrap:wrap}
+.promo .side{border:1px dashed var(--line2);border-radius:8px;padding:16px;text-align:center;background:rgba(8,5,10,.4)}
+.promo .side .h{font-size:30px;color:var(--red);animation:beat 1.6s infinite}
+.promo .side .u{display:block;margin-top:8px;color:var(--rose);font-weight:700;font-size:14px}
+.promo .side .d{display:block;margin-top:4px;color:var(--dim);font-size:11px}
+footer{border-top:1px solid var(--line);background:#0a0608;padding:40px 0 28px;margin-top:14px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px}
+.fgrid h4{margin:0 0 12px;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--red)}
+.fgrid a,.fgrid p{display:block;color:var(--mut);font-size:12.2px;margin:0 0 7px;transition:.16s;word-break:break-word}
+.fgrid a:hover{color:var(--red)}
+.fgrid .live{color:var(--red);font-weight:700}
+.fbot{margin-top:28px;padding-top:16px;border-top:1px dashed var(--line2);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:11.4px;color:var(--dim)}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);z-index:10001;background:#150c10;border:1px solid var(--red);color:#fff;border-radius:6px;padding:9px 16px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 0 24px rgba(224,27,44,.35)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#top2{position:fixed;right:20px;bottom:20px;z-index:8000;width:42px;height:42px;border-radius:7px;border:1px solid var(--line2);background:#150c10;color:var(--red);cursor:pointer;font-size:16px;opacity:0;pointer-events:none;transition:.25s}
+#top2.show{opacity:1;pointer-events:auto}
+#top2:hover{background:var(--blood);color:#fff;border-color:var(--red)}
+@media (prefers-reduced-motion:reduce){.word1,.word1::before,.word1::after,.word2,.titleline,.mqin{animation:none}}
+@media(max-width:1040px){.promo{grid-template-columns:minmax(0,1fr)}.fgrid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr}.step .ar{display:none}}
+@media(max-width:760px){
+.navlinks{position:fixed;inset:56px 0 auto 0;flex-direction:column;background:#0b0608;border-bottom:1px solid var(--line2);padding:12px 18px 18px;gap:4px;transform:translateY(-130%);transition:.3s;overflow:visible}
+.navlinks.open{transform:none}
+.navlinks a{padding:11px 12px;border:1px solid var(--line);font-size:13px}
+#burger{display:block}.navcta{display:none}
+section{padding:34px 0 40px}.hero{padding:36px 0 26px}.wrap{padding:0 16px}.fgrid{grid-template-columns:1fr}
+}
+</style>
 </head>
-<body>
-
-<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="blob blob-1" id="blob1"></div>
-  <div class="blob blob-2" id="blob2"></div>
-  <div class="blob blob-3" id="blob3"></div>
-  <div class="noise"></div>
-  <div class="particles" id="particles"></div>
+<body id="top">
+<div id="prog"></div>
+<header>
+<div class="nav">
+<a href="#top" class="logo"><span class="hrt">♥</span><b>heart</b>bleed<span class="cur">_</span></a>
+<button id="burger" aria-label="меню">≡</button>
+<nav class="navlinks" id="navlinks">
+<a href="#howto">как подключить</a>
+<a href="#configs">конфиги</a>
+<a href="#proxies">tg-прокси</a>
+<a href="#promo">telegram</a>
+<a href="#footer">контакты</a>
+</nav>
+<a class="navcta" href="https://t.me/heartbleeed" target="_blank" rel="noopener">✈ канал</a>
 </div>
-
-<header class="nav" id="nav">
-  <a href="#" class="logo">
-    <svg class="logo-heart" viewBox="0 0 100 100" fill="none">
-      <defs>
-        <linearGradient id="logoGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#ff2e4d"/>
-          <stop offset="100%" stop-color="#7a0213"/>
-        </linearGradient>
-      </defs>
-      <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
-            fill="url(#logoGrad)"/>
-      <path class="logo-drip" d="M50 88 C50 88 47 94 47 97 C47 99 48.5 100 50 100 C51.5 100 53 99 53 97 C53 94 50 88 50 88 Z"
-            fill="#c1121f"/>
-    </svg>
-    <span class="logo-text">HEART<em>BLEED</em></span>
-  </a>
-
-  <nav class="nav-links">
-    <a href="#configs">Конфиги</a>
-    <a href="#proxies">TG-прокси</a>
-    <a href="#howto">Как подключить</a>
-    <a href="#promo">Telegram</a>
-    <a href="#footer">Контакты</a>
-  </nav>
-
-  <div class="nav-actions">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
-      </svg>
-      <input type="text" id="searchInput" placeholder="vless, white, mobile…">
-    </div>
-    <a class="tg-btn-nav" href="https://t.me/heartbleeed" target="_blank" rel="noopener" aria-label="Telegram">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5L18.6 6c.4-.3-.1-.5-.6-.2L7.3 12.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.6z"/></svg>
-    </a>
-    <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
-  </div>
 </header>
 
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-tag reveal">
-      <span class="dot"></span> бесплатно · happ / v2rayN и другие клиенты
-    </div>
-    <h1 class="hero-title reveal">
-      <span class="hero-ghost" aria-hidden="true">HEARTBLEED</span>
-      VPN-КОНФИГИ<br>В <em>ОДИН КЛИК</em>
-    </h1>
-    <p class="hero-sub reveal">
-      Бесплатные подборки конфигов для импорта в happ, v2rayN и другие VPN-клиенты,
-      а также живые Telegram-прокси. Нажал — и ты в сети.
-    </p>
-    <div class="hero-cta reveal">
-      <a href="#configs" class="btn btn-primary">
-        Выбрать конфиг
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#proxies" class="btn btn-ghost">Telegram-прокси</a>
-    </div>
-  </div>
+<div class="hero">
+<div class="wrap">
+<span class="badge"><i></i> бесплатно · happ / v2rayN и другие клиенты</span>
+<h1><span class="word1" data-t="VPN-КОНФИГИ">VPN-КОНФИГИ</span><span class="word2">В ОДИН КЛИК</span></h1>
+<span class="titleline" aria-hidden="true"></span>
+<p class="tag">Бесплатные подборки конфигов и живые Telegram-прокси. Нажал — и ты в сети.</p>
+<p class="lead">Скопируй ссылку на конфиг, импортируй подписку в happ, v2rayN или любой другой клиент — либо нажми «Подключить» на MTProto-прокси, и Telegram подхватит его сам. Без регистрации, без оплаты.</p>
+<div class="hbtns">
+<a class="btn p" href="#configs">↓ выбрать конфиг</a>
+<a class="btn" href="#proxies">✈ telegram-прокси</a>
+<a class="btn" href="#howto">инструкция</a>
+</div>
+<div class="ecgrow">
+<canvas id="ecg" width="360" height="64" aria-hidden="true"></canvas>
+<span>heartbleed-vpn.ru — <span class="st">● online</span> · ♥ <span id="bpm">72</span> bpm</span>
+</div>
+</div>
+</div>
+<div class="drip"></div>
+<div class="mq"><div class="mqin" id="mqin"></div></div>
 
-  <div class="hero-ecg" aria-hidden="true">
-    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-      <path class="ecg-line" d="M0 60 H380 L400 60 L415 20 L435 100 L455 45 L470 60 H760 L780 60 L795 20 L815 100 L835 45 L850 60 H1200"/>
-      <path class="ecg-glow" d="M0 60 H380 L400 60 L415 20 L435 100 L455 45 L470 60 H760 L780 60 L795 20 L815 100 L835 45 L850 60 H1200"/>
-    </svg>
-  </div>
+<section id="howto">
+<div class="wrap">
+<div class="shead rv"><span class="snum">01 // инструкция</span><h2>Три шага <em>до свободы</em></h2></div>
+<p class="ssub rv">Ничего сложного: буфер обмена, клиент, подписка. Работает на телефоне и на компьютере одинаково.</p>
+<div class="steps">
+<div class="step rv"><div class="n">01</div><h3>Скопируй</h3><p>Нажми «Скопировать ссылку» на нужном конфиге — ссылка окажется в буфере обмена.</p><span class="ar">→</span></div>
+<div class="step rv"><div class="n">02</div><h3>Открой клиент</h3><p>Запусти happ, v2rayN или любой другой VPN-клиент с поддержкой подписок.</p><span class="ar">→</span></div>
+<div class="step rv"><div class="n">03</div><h3>Импортируй</h3><p>Добавь подписку из буфера обмена — и подключайся к свободной сети.</p></div>
+</div>
+</div>
 </section>
 
-<section class="howto" id="howto">
-  <div class="section-head reveal">
-    <div>
-      <span class="section-kicker">// инструкция</span>
-      <h2 class="section-title">ТРИ ШАГА ДО <em>СВОБОДЫ</em></h2>
-    </div>
-  </div>
-  <div class="steps">
-    <div class="step reveal">
-      <span class="step-num">01</span>
-      <h4>Скопируй</h4>
-      <p>Нажми «Скопировать ссылку» на нужном конфиге — ссылка окажется в буфере обмена.</p>
-    </div>
-    <div class="step-arrow reveal" aria-hidden="true">→</div>
-    <div class="step reveal" style="transition-delay:120ms">
-      <span class="step-num">02</span>
-      <h4>Открой клиент</h4>
-      <p>Запусти happ, v2rayN или любой другой VPN-клиент с поддержкой подписок.</p>
-    </div>
-    <div class="step-arrow reveal" aria-hidden="true">→</div>
-    <div class="step reveal" style="transition-delay:240ms">
-      <span class="step-num">03</span>
-      <h4>Импортируй</h4>
-      <p>Добавь подписку из буфера обмена — и подключайся к свободной сети.</p>
-    </div>
-  </div>
+<section id="configs">
+<div class="wrap">
+<div class="shead rv"><span class="snum">02 // подборки</span><h2>VPN-<em>конфиги</em></h2></div>
+<p class="ssub rv">Ссылки-подписки для импорта в happ, v2rayN и совместимые клиенты. Копируй и вставляй — клиент сам развернёт список серверов.</p>
+<div class="chips rv" id="chips">
+<button data-f="all" class="act">Всё</button>
+<button data-f="BLACK">Black</button>
+<button data-f="WHITE">White</button>
+<button data-f="MOBILE">Mobile</button>
+<button data-f="MIX">Mix</button>
+</div>
+<div class="cfggrid" id="cfggrid"></div>
+</div>
 </section>
 
-<section class="catalog" id="configs">
-  <div class="section-head reveal">
-    <div>
-      <span class="section-kicker">// подборки</span>
-      <h2 class="section-title">VPN-<em>КОНФИГИ</em></h2>
-    </div>
-    <div class="filters" id="filters"></div>
-  </div>
-  <div class="grid" id="configGrid"></div>
-  <div class="empty-state" id="emptyState" hidden>
-    <svg viewBox="0 0 100 100" fill="none">
-      <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
-            stroke="#c1121f" stroke-width="3" stroke-dasharray="6 8"/>
-    </svg>
-    <p>Ничего не найдено. Сердце разрывается…</p>
-  </div>
+<section id="proxies">
+<div class="wrap">
+<div class="shead rv"><span class="snum">03 // mtproto</span><h2>Telegram-<em>прокси</em></h2></div>
+<p class="ssub rv">Нажми «Подключить» — прокси добавится в Telegram сам. Кнопка копирования кладёт ссылку в буфер на случай ручной настройки.</p>
+<div class="pxlist" id="pxlist"></div>
+<div class="fallback rv">Прокси не работают? Забери свежие рабочие тут: <a href="https://mtproxy.tg" target="_blank" rel="noopener">mtproxy.tg</a> · <a href="https://buhta.xyz/proxy/" target="_blank" rel="noopener">buhta.xyz/proxy</a></div>
+</div>
 </section>
 
-<section class="catalog proxy-section" id="proxies">
-  <div class="section-head reveal">
-    <div>
-      <span class="section-kicker">// mtproto</span>
-      <h2 class="section-title">TELEGRAM-<em>ПРОКСИ</em></h2>
-    </div>
-    <span class="section-note mono reveal">нажми «Подключить» — прокси добавится в Telegram</span>
-  </div>
-  <div class="p-grid" id="proxyGrid"></div>
-  <div class="proxy-fallback reveal">
-    <span class="heart">♥</span>
-    Прокси не работают? Забери свежие рабочие тут:
-    <a href="https://mtproxy.tg" target="_blank" rel="noopener">mtproxy.tg</a>
-    <span class="sep">·</span>
-    <a href="https://buhta.xyz/proxy/" target="_blank" rel="noopener">buhta.xyz/proxy</a>
-  </div>
+<section id="promo">
+<div class="wrap">
+<div class="promo rv">
+<div>
+<h3>Подпишись на <em>Telegram</em></h3>
+<p>Исследования по безопасности, обучающие посты, разборы уязвимостей и много другого — всё в канале <b class="rose">@heartbleeed</b>. Там же — свежие конфиги, быстрая связь и помощь.</p>
+<div class="acts">
+<a class="btn p" href="https://t.me/heartbleeed" target="_blank" rel="noopener">✈ открыть канал</a>
+<button class="copy" data-copy-val="@heartbleeed" style="padding:12px 20px;font-size:13px">скопировать @heartbleeed</button>
+</div>
+</div>
+<div class="side">
+<span class="h">♥</span>
+<span class="u">t.me/heartbleeed</span>
+<span class="d">bleeding in the system · ● активен</span>
+</div>
+</div>
+</div>
 </section>
 
-<section class="promo" id="promo">
-  <div class="promo-card reveal">
-    <div class="promo-bg" aria-hidden="true"></div>
-    <span class="section-kicker">// heartbleed</span>
-    <h2>ПОДПИШИСЬ НА <em>TELEGRAM</em></h2>
-    <p>Исследования по безопасности, обучающие посты, разборы уязвимостей и много другого — всё в канале <b>@heartbleeed</b>. Там же — быстрая связь и помощь.</p>
-    <div class="promo-cta">
-      <a href="https://t.me/heartbleeed" target="_blank" rel="noopener" class="btn btn-primary">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5L18.6 6c.4-.3-.1-.5-.6-.2L7.3 12.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.6z"/></svg>
-        Открыть канал
-      </a>
-      <button class="btn btn-ghost" id="copyNickBtn">Скопировать @heartbleeed</button>
-    </div>
-  </div>
-</section>
-
-<footer class="footer" id="footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="logo">
-        <svg class="logo-heart" viewBox="0 0 100 100" fill="none">
-          <path d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z" fill="#c1121f"/>
-        </svg>
-        <span class="logo-text">HEART<em>BLEED</em></span>
-      </a>
-      <p>Бесплатные VPN-конфиги и Telegram-прокси. Скопировал ссылку — подключился.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Разделы</h4>
-      <a href="#configs">Конфиги</a><a href="#proxies">TG-прокси</a><a href="#howto">Инструкция</a><a href="#promo">Telegram</a>
-    </div>
-    <div class="footer-col">
-      <h4>Клиенты</h4>
-      <a href="https://www.happ.su/main/ru" target="_blank" rel="noopener">happ</a>
-      <a href="https://en.v2rayn.org" target="_blank" rel="noopener">v2rayN</a>
-      <a href="#" data-hint="другие клиенты">другие</a>
-    </div>
-    <div class="footer-col">
-      <h4>Связь</h4>
-      <a href="https://t.me/heartbleeed" target="_blank" rel="noopener">Telegram</a>
-      <a href="https://bugbounty.bi.zone/profile/Heartbleed/hackactivity" target="_blank" rel="noopener">BI.ZONE</a>
-      <a href="https://vk.ru/heartbieed" target="_blank" rel="noopener">VK</a>
-      <a href="https://steamcommunity.com/id/Heartbleeddd/" target="_blank" rel="noopener">Steam</a>
-    </div>
-  </div>
+<footer id="footer">
+<div class="wrap">
+<div class="fgrid">
+<div>
+<h4>♥ Heartbleed VPN</h4>
+<p class="mut" style="max-width:42ch">Бесплатные VPN-конфиги и Telegram-прокси. Скопировал ссылку — подключился. Без регистрации и оплаты, обновляется вместе с каналом.</p>
+<p class="dim" style="margin-top:12px">heartbleed-vpn.ru · <span class="live">● online</span> · happ · v2rayN · mtproto</p>
+</div>
+<div>
+<h4>разделы</h4>
+<a href="#configs">конфиги</a>
+<a href="#proxies">tg-прокси</a>
+<a href="#howto">инструкция</a>
+<a href="#promo">telegram</a>
+</div>
+<div>
+<h4>клиенты</h4>
+<a href="https://www.happ.su/main/ru" target="_blank" rel="noopener">[↗] happ</a>
+<a href="https://en.v2rayn.org" target="_blank" rel="noopener">[↗] v2rayN</a>
+<a href="#howto">[↗] другие клиенты</a>
+</div>
+<div>
+<h4>связь</h4>
+<a href="https://t.me/heartbleeed" target="_blank" rel="noopener">[↗] Telegram · @heartbleeed</a>
+<a href="https://bugbounty.bi.zone/profile/Heartbleed/hackactivity" target="_blank" rel="noopener">[↗] BI.ZONE · hackactivity</a>
+<a href="https://vk.ru/heartbieed" target="_blank" rel="noopener">[↗] VK · heartbieed</a>
+<a href="https://steamcommunity.com/id/Heartbleeddd/" target="_blank" rel="noopener">[↗] Steam · Heartbleeddd</a>
+</div>
+</div>
+<div class="fbot">
+<span>© 2026 heartbleed-vpn · made with <span class="red">♥</span> on macOS</span>
+<span>свобода соединения — бесплатно и навсегда</span>
+</div>
+</div>
 </footer>
 
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal-panel">
-    <div class="modal-head">
-      <div>
-        <span class="section-kicker" id="modalType"></span>
-        <h3 id="modalName"></h3>
-      </div>
-      <button class="close-btn" id="modalClose" aria-label="Закрыть">✕</button>
-    </div>
-    <pre class="pre-box mono" id="modalText"></pre>
-    <div class="modal-foot">
-      <span class="mono">для импорта в happ / v2rayN</span>
-      <button class="btn btn-primary btn-sm" id="modalCopy">Скопировать ссылку</button>
-    </div>
-  </div>
-</div>
+<button id="top2" title="наверх" aria-label="наверх">↑</button>
+<div id="toast">скопировано ✓</div>
 
-<div class="toasts" id="toasts"></div>
-
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const PROXIES=[
+{s:'tundra.maggic.biz',p:443,x:'ee0b5cdd0b832ddb62d7dcdbc0cff5772074756e6472612e6d61676769632e62697a'},
+{s:'s22.bopen.bond',p:443,x:'ee536866c85caff869a1b2699defc900827332322e626f70656e2e626f6e64'},
+{s:'s23.bopen.bond',p:443,x:'ee1b26562dff034e5aad0530b21ac768237332332e626f70656e2e626f6e64'},
+{s:'x.shmelproxy.top',p:443,x:'eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275'},
+{s:'3.mtprotonewrunningproxasia.info',p:8443,x:'eeNEgYdJvXrFGRMCIMJdCQ'},
+{s:'behind.thedawnmist.info',p:8443,x:'eeNEgYdJvXrFGRMCIMJdCQ'}];
+const CONFIGS=[
+{id:'black-ss-all',name:'BLACK SS + All RUS',type:'Shadowsocks',tags:['BLACK','SS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt',desc:'Чёрный режим на Shadowsocks: весь трафик идёт через VPN, кроме российских сервисов. Ключи для всех регионов РФ.'},
+{id:'black-ss-weak-dpi',name:'BLACK SS · Weak DPI',type:'Shadowsocks',tags:['BLACK','SS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS_WEAK_DPI_RUS.txt',desc:'Подборка для провайдеров со слабым DPI: Shadowsocks-ключи, которые стабильно работают там, где другие отваливаются.'},
+{id:'black-vless',name:'BLACK VLESS RUS',type:'VLESS',tags:['BLACK','VLESS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS.txt',desc:'Чёрный режим на VLESS: максимальная устойчивость к блокировкам, весь трафик через туннель, кроме RU-сервисов.'},
+{id:'white-cidr',name:'WHITE CIDR RU · all',type:'CIDR-список',tags:['WHITE'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt',desc:'Белый режим: через VPN идут только российские сайты и сервисы, всё остальное — напрямую. Минимальный расход трафика.'},
+{id:'vless-white-mobile',name:'VLESS Reality · White · Mobile',type:'VLESS Reality',tags:['WHITE','MOBILE','VLESS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt',desc:'Белые списки на VLESS Reality, оптимизировано для мобильных клиентов: экономит батарею и трафик.'},
+{id:'black-vless-mobile',name:'BLACK VLESS RUS · Mobile',type:'VLESS',tags:['BLACK','MOBILE','VLESS'],url:'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS_mobile.txt',desc:'Чёрный режим на VLESS для смартфонов: весь трафик через VPN, подборка адаптирована под мобильные клиенты.'},
+{id:'free-servers-mix',name:'FREE SERVERS · Mix',type:'Подписка',tags:['MIX'],url:'https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub',desc:'Большой микс бесплатных серверов: готовая подписка, много локаций. Скопируй ссылку и добавь в happ / v2rayN.'},
+{id:'v2ray-global-mix',name:'GLOBAL MIX · V2Ray',type:'Подписка',tags:['MIX'],url:'https://raw.githubusercontent.com/miladtahanian/V2RayCFGDumper/refs/heads/main/sub.txt',desc:'Свежая подборка V2Ray-конфигов со всего мира, регулярно обновляется. Скопируй ссылку и импортируй в свой клиент.'}];
+function renderCfg(f='all'){
+ const l=CONFIGS.filter(c=>f==='all'||c.tags.includes(f));
+ $('#cfggrid').innerHTML=l.length?l.map(c=>`<div class="cfg rv in"><div class="top">${c.tags.map(t=>`<span class="tg">${t}</span>`).join('')}<span class="tp">${c.type} · для happ / v2rayN</span></div><h3>${c.name}</h3><p>${c.desc}</p><button class="copy" data-copy-val="${c.url}">скопировать ссылку</button></div>`).join(''):'<div class="empty"><b>♥</b>Ничего не найдено. Сердце разрывается…</div>';
+}
+function renderPx(){
+ $('#pxlist').innerHTML=PROXIES.length?PROXIES.map((p,i)=>{
+  const q=`server=${encodeURIComponent(p.s)}&port=${p.p}&secret=${encodeURIComponent(p.x)}`;
+  return `<div class="px rv in"><span class="idx">PROXY ${String(i+1).padStart(2,'0')} · MTProto</span><span class="t"><b>${p.s}</b><span class="d">порт: ${p.p} · нажми — прокси подключится в Telegram</span></span><a class="go" href="https://t.me/proxy?${q}" target="_blank" rel="noopener">подключить ✈</a><button class="copy" data-copy-val="tg://proxy?${q}">copy</button></div>`;
+ }).join(''):'<div class="empty"><b>♥</b>Сейчас пусто. Сердце разрывается… свежие прокси всегда на mtproxy.tg ниже.</div>';
+}
+renderCfg();renderPx();
+const toast=$('#toast');let tt;
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('.copy');if(!b)return;
+ const v=b.dataset.copyVal||'';
+ try{await navigator.clipboard.writeText(v)}catch(err){const ta=document.createElement('textarea');ta.value=v;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}
+ toast.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove('show'),1400);
+ const o=b.textContent;b.textContent='copied ✓';b.classList.add('done');setTimeout(()=>{b.textContent=o;b.classList.remove('done')},1300);
+});
+$$('#chips button').forEach(b=>b.addEventListener('click',()=>{$$('#chips button').forEach(x=>x.classList.remove('act'));b.classList.add('act');renderCfg(b.dataset.f)}));
+const MQ=['бесплатно · без регистрации','happ · v2rayN · любые клиенты','mtproto прокси · в один клик','скопировал — подключился','обновления в @heartbleeed','black · white · mobile · mix','30+ vulns · bug bounty hunter','macOS · zsh','♥ 72 bpm'];
+$('#mqin').innerHTML=(m=>m+m)(MQ.map(t=>`<span>✦ <b>${t}</b></span>`).join(''));
+(function(){const cv=$('#ecg');if(!cv)return;const x=cv.getContext('2d'),W=cv.width,H=cv.height,d=new Array(W).fill(H*.6);let p=0,run=true;
+const s=t=>{t%=1;if(t<.1)return 0;if(t<.16)return Math.sin((t-.1)/.06*Math.PI)*.16;if(t<.22)return -.14;if(t<.26)return 1;if(t<.3)return -.42;if(t<.4)return Math.sin((t-.3)/.1*Math.PI)*.26;return 0};
+document.addEventListener('visibilitychange',()=>run=!document.hidden);
+(function draw(){requestAnimationFrame(draw);if(!run)return;p+=.012;d.push(H*.6-s(p)*H*.42);d.shift();x.clearRect(0,0,W,H);x.strokeStyle='rgba(140,15,28,.22)';x.lineWidth=1;x.beginPath();x.moveTo(0,H/2);x.lineTo(W,H/2);x.stroke();const g=x.createLinearGradient(0,0,W,0);g.addColorStop(0,'rgba(255,45,63,0)');g.addColorStop(1,'#ff2d3f');x.strokeStyle=g;x.lineWidth=2;x.shadowColor='rgba(255,45,63,.7)';x.shadowBlur=7;x.beginPath();for(let i=0;i<W;i++){i?x.lineTo(i,d[i]):x.moveTo(i,d[i])}x.stroke();x.shadowBlur=0})();
+setInterval(()=>{if(!document.hidden)$('#bpm').textContent=68+Math.floor(Math.random()*9)},2200)})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+$$('.rv').forEach(el=>io.observe(el));
+const links=$$('.navlinks a');
+const sio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('act',l.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section[id]').forEach(s=>sio.observe(s));
+addEventListener('scroll',()=>{const h=document.documentElement;$('#prog').style.width=h.scrollTop/(h.scrollHeight-h.clientHeight)*100+'%';$('#top2').classList.toggle('show',h.scrollTop>600)},{passive:true});
+$('#top2').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+const burger=$('#burger'),nav=$('#navlinks');
+burger.addEventListener('click',()=>nav.classList.toggle('open'));
+nav.addEventListener('click',e=>{if(e.target.tagName==='A')nav.classList.remove('open')});
+addEventListener('keydown',e=>{if(e.key==='Escape')nav.classList.remove('open')});
+</script>
 </body>
 </html>
-
-
-              <script>
-                              const FILTERS = ['Всё', 'Black', 'White', 'Mobile', 'Mix'];
-
-const CONFIGS = [
-  {
-    id: 'black-ss-all',
-    name: 'BLACK SS + All RUS',
-    type: 'Shadowsocks',
-    tags: ['BLACK', 'SS'],
-    art: 'pulse',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS%2BAll_RUS.txt',
-    desc: 'Чёрный режим на Shadowsocks: весь трафик идёт через VPN, кроме российских сервисов. Ключи для всех регионов РФ.',
-  },
-  {
-    id: 'black-ss-weak-dpi',
-    name: 'BLACK SS · Weak DPI',
-    type: 'Shadowsocks',
-    tags: ['BLACK', 'SS'],
-    art: 'smoke',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_SS_WEAK_DPI_RUS.txt',
-    desc: 'Подборка для провайдеров со слабым DPI: Shadowsocks-ключи, которые стабильно работают там, где другие отваливаются.',
-  },
-  {
-    id: 'black-vless',
-    name: 'BLACK VLESS RUS',
-    type: 'VLESS',
-    tags: ['BLACK', 'VLESS'],
-    art: 'slash',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS.txt',
-    desc: 'Чёрный режим на VLESS: максимальная устойчивость к блокировкам, весь трафик через туннель, кроме RU-сервисов.',
-  },
-  {
-    id: 'white-cidr',
-    name: 'WHITE CIDR RU · all',
-    type: 'CIDR-список',
-    tags: ['WHITE'],
-    art: 'orb',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/WHITE-CIDR-RU-all.txt',
-    desc: 'Белый режим: через VPN идут только российские сайты и сервисы, всё остальное — напрямую. Минимальный расход трафика.',
-  },
-  {
-    id: 'vless-white-mobile',
-    name: 'VLESS Reality · White · Mobile',
-    type: 'VLESS Reality',
-    tags: ['WHITE', 'MOBILE', 'VLESS'],
-    art: 'heart',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/Vless-Reality-White-Lists-Rus-Mobile.txt',
-    desc: 'Белые списки на VLESS Reality, оптимизировано для мобильных клиентов: экономит батарею и трафик.',
-  },
-  {
-    id: 'black-vless-mobile',
-    name: 'BLACK VLESS RUS · Mobile',
-    type: 'VLESS',
-    tags: ['BLACK', 'MOBILE', 'VLESS'],
-    art: 'drip',
-    url: 'https://raw.githubusercontent.com/igareck/vpn-configs-for-russia/refs/heads/main/BLACK_VLESS_RUS_mobile.txt',
-    desc: 'Чёрный режим на VLESS для смартфонов: весь трафик через VPN, подборка адаптирована под мобильные клиенты.',
-  },
-  {
-    id: 'free-servers-mix',
-    name: 'FREE SERVERS · Mix',
-    type: 'Подписка',
-    tags: ['MIX'],
-    art: 'smoke',
-    url: 'https://raw.githubusercontent.com/Pawdroid/Free-servers/refs/heads/main/sub',
-    desc: 'Большой микс бесплатных серверов: готовая подписка, много локаций. Скопируй ссылку и добавь в happ / v2rayN.',
-  },
-  {
-    id: 'v2ray-global-mix',
-    name: 'GLOBAL MIX · V2Ray',
-    type: 'Подписка',
-    tags: ['MIX'],
-    art: 'orb',
-    url: 'https://raw.githubusercontent.com/miladtahanian/V2RayCFGDumper/refs/heads/main/sub.txt',
-    desc: 'Свежая подборка V2Ray-конфигов со всего мира, регулярно обновляется. Скопируй ссылку и импортируй в свой клиент.',
-  },
-];
-
-const PROXIES = [
-  { link: 'tg://proxy?server=tundra.maggic.biz&port=443&secret=ee0b5cdd0b832ddb62d7dcdbc0cff5772074756e6472612e6d61676769632e62697a' },
-  { link: 'tg://proxy?server=s22.bopen.bond&port=443&secret=ee536866c85caff869a1b2699defc900827332322e626f70656e2e626f6e64' },
-  { link: 'tg://proxy?server=s23.bopen.bond&port=443&secret=ee1b26562dff034e5aad0530b21ac768237332332e626f70656e2e626f6e64' },
-  { link: 'tg://proxy?server=x.shmelproxy.top&port=443&secret=eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275' },
-  { link: 'tg://proxy?server=3.mtprotonewrunningproxasia.info&port=8443&secret=eeNEgYdJvXrFGRMCIMJdCQ' },
-  { link: 'tg://proxy?server=behind.thedawnmist.info&port=8443&secret=eeNEgYdJvXrFGRMCIMJdCQ' },
-];
-
-const TELEGRAM_NICK = '@heartbleeed';
-
-function artSVG(cfg) {
-  const g  = 'grad-' + cfg.id;
-  const rg = 'rglow-' + cfg.id;
-  const defs = `
-    <defs>
-      <radialGradient id="${rg}" cx="50%" cy="38%" r="75%">
-        <stop offset="0%" stop-color="#1d1218"/>
-        <stop offset="55%" stop-color="#100c12"/>
-        <stop offset="100%" stop-color="#07050a"/>
-      </radialGradient>
-      <linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#ff2e4d"/>
-        <stop offset="55%" stop-color="#c1121f"/>
-        <stop offset="100%" stop-color="#5e0110"/>
-      </linearGradient>
-    </defs>`;
-
-  let shape = '';
-  switch (cfg.art) {
-    case 'drip':
-      shape = `
-        <circle cx="200" cy="90" r="48" fill="url(#${g})" opacity=".92"/>
-        <rect x="160" y="90" width="15" height="70" rx="7.5" fill="url(#${g})" opacity=".85"/>
-        <rect x="193" y="90" width="14" height="104" rx="7" fill="url(#${g})" opacity=".95"/>
-        <rect x="227" y="90" width="12" height="52" rx="6" fill="url(#${g})" opacity=".75"/>
-        <circle cx="200" cy="216" r="6" fill="#ff2e4d" opacity=".8"/>
-        <circle cx="167" cy="176" r="4" fill="#c1121f" opacity=".7"/>`;
-      break;
-    case 'heart':
-      shape = `
-        <circle cx="200" cy="130" r="76" fill="#ff2e4d" opacity=".07"/>
-        <path transform="translate(128,52) scale(1.45)"
-          d="M50 88 C20 66 8 48 8 32 C8 18 19 8 32 8 C40 8 46 12 50 18 C54 12 60 8 68 8 C81 8 92 18 92 32 C92 48 80 66 50 88 Z"
-          fill="url(#${g})" opacity=".95"/>`;
-      break;
-    case 'pulse':
-      shape = `
-        <circle cx="200" cy="140" r="84" fill="none" stroke="url(#${g})" stroke-width="2" opacity=".35"/>
-        <path d="M90 140 H155 L170 140 L183 96 L203 188 L219 128 L231 140 H310"
-          fill="none" stroke="url(#${g})" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="203" cy="188" r="5" fill="#ff2e4d" opacity=".9"/>`;
-      break;
-    case 'slash':
-      shape = `
-        <g stroke="url(#${g})" stroke-linecap="round">
-          <line x1="95"  y1="225" x2="210" y2="52"  stroke-width="24" opacity=".9"/>
-          <line x1="160" y1="232" x2="268" y2="68"  stroke-width="13" opacity=".55"/>
-          <line x1="226" y1="228" x2="308" y2="102" stroke-width="7"  opacity=".35"/>
-        </g>
-        <circle cx="122" cy="80" r="5" fill="#ff2e4d" opacity=".7"/>
-        <circle cx="292" cy="200" r="6" fill="#c1121f" opacity=".6"/>`;
-      break;
-    case 'orb':
-      shape = `
-        <circle cx="200" cy="135" r="82" fill="url(#${g})" opacity=".16"/>
-        <circle cx="200" cy="135" r="58" fill="none" stroke="url(#${g})" stroke-width="2.5" opacity=".6"/>
-        <circle cx="200" cy="135" r="36" fill="url(#${g})" opacity=".9"/>
-        <circle cx="188" cy="122" r="9" fill="#ff8095" opacity=".55"/>`;
-      break;
-    case 'smoke':
-      shape = `
-        <ellipse cx="165" cy="155" rx="85" ry="52" fill="url(#${g})" opacity=".28" transform="rotate(-18 165 155)"/>
-        <ellipse cx="238" cy="112" rx="70" ry="42" fill="url(#${g})" opacity=".4" transform="rotate(14 238 112)"/>
-        <ellipse cx="203" cy="140" rx="46" ry="30" fill="#ff2e4d" opacity=".22"/>
-        <circle cx="203" cy="138" r="8" fill="#ffb3bf" opacity=".8"/>`;
-      break;
-  }
-
-  return `<svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-    ${defs}<rect width="400" height="320" fill="url(#${rg})"/>${shape}
-  </svg>`;
-}
-
-const state = {
-  filter: 'Всё',
-  query: '',
-};
-const cache = {};
-const pending = {};
-
-const gridEl      = document.getElementById('configGrid');
-const proxyGridEl = document.getElementById('proxyGrid');
-const filtersEl   = document.getElementById('filters');
-const searchInput = document.getElementById('searchInput');
-const emptyState  = document.getElementById('emptyState');
-const modal       = document.getElementById('modal');
-const modalName   = document.getElementById('modalName');
-const modalType   = document.getElementById('modalType');
-const modalText   = document.getElementById('modalText');
-const modalCopy   = document.getElementById('modalCopy');
-const toastsEl    = document.getElementById('toasts');
-const nav         = document.getElementById('nav');
-
-const TG_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.7.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5L18.6 6c.4-.3-.1-.5-.6-.2L7.3 12.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5l18.7-7.2c.9-.3 1.6.2 1.3 1.6z"/></svg>`;
-const EYE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
-
-function initTitleAnim() {
-  const title = document.querySelector('.hero-title');
-  if (!title || title.dataset.animated) return;
-  title.dataset.animated = '1';
-  let counter = 0;
-  const wrapChars = (node, text) => {
-    const frag = document.createDocumentFragment();
-    for (const ch of text) {
-      const s = document.createElement('span');
-      s.className = 'ch';
-      s.style.setProperty('--i', counter++);
-      s.textContent = ch === ' ' ? '\u00A0' : ch;
-      frag.appendChild(s);
-    }
-    node.replaceWith(frag);
-  };
-  Array.from(title.childNodes).forEach(node => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = node.textContent.replace(/^\s+/, '');
-      if (text.trim()) wrapChars(node, text);
-    } else if (node.nodeName === 'EM') {
-      Array.from(node.childNodes).forEach(inner => {
-        if (inner.nodeType === Node.TEXT_NODE) {
-          const text = inner.textContent.replace(/^\s+/, '');
-          if (text.trim()) wrapChars(inner, text);
-        }
-      });
-    }
-  });
-}
-
-async function getConfig(cfg) {
-  if (cache[cfg.id]) return cache[cfg.id];
-  if (!pending[cfg.id]) {
-    pending[cfg.id] = fetch(cfg.url)
-      .then(r => {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(text => {
-        const data = { text: text.trim() };
-        cache[cfg.id] = data;
-        return data;
-      })
-      .finally(() => { delete pending[cfg.id]; });
-  }
-  return pending[cfg.id];
-}
-
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-  }
-}
-
-function renderFilters() {
-  filtersEl.innerHTML = FILTERS.map(f =>
-    `<button class="filter-pill${f === state.filter ? ' active' : ''}" data-filter="${f}">${f}</button>`
-  ).join('');
-  filtersEl.querySelectorAll('.filter-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.filter = btn.dataset.filter;
-      renderFilters();
-      renderConfigs();
-    });
-  });
-}
-
-function visibleConfigs() {
-  return CONFIGS.filter(c => {
-    const fOK = state.filter === 'Всё' || c.tags.includes(state.filter.toUpperCase());
-    const qOK = !state.query ||
-      (c.name + ' ' + c.desc + ' ' + c.type + ' ' + c.tags.join(' '))
-        .toLowerCase().includes(state.query.toLowerCase());
-    return fOK && qOK;
-  });
-}
-
-function chipHTML(tag) {
-  const cls = tag === 'MOBILE' ? 'mobile' : tag === 'WHITE' ? 'white' : tag === 'BLACK' ? 'black' : 'proto';
-  return `<span class="chip ${cls}">${tag}</span>`;
-}
-
-function renderConfigs() {
-  const list = visibleConfigs();
-  emptyState.hidden = list.length !== 0;
-
-  gridEl.innerHTML = list.map((c, i) => `
-    <article class="card reveal" style="transition-delay:${i * 70}ms">
-      <div class="card-art">
-        <div class="chips">${c.tags.map(chipHTML).join('')}</div>
-        ${artSVG(c)}
-      </div>
-      <div class="card-body">
-        <div class="card-cat mono">${c.type} · для happ / v2rayN</div>
-        <h3 class="card-name">${c.name}</h3>
-        <p class="card-desc">${c.desc}</p>
-        <div class="card-row">
-          <button class="btn btn-primary btn-sm" data-copy="${c.id}">Скопировать ссылку</button>
-          <button class="icon-btn" data-preview="${c.id}" aria-label="Предпросмотр">${EYE_ICON}</button>
-        </div>
-      </div>
-    </article>
-  `).join('');
-
-  gridEl.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', () => handleCopy(btn, cfgById(btn.dataset.copy)));
-  });
-  gridEl.querySelectorAll('[data-preview]').forEach(btn => {
-    btn.addEventListener('click', () => openPreview(cfgById(btn.dataset.preview)));
-  });
-
-  observeReveals();
-}
-
-const cfgById = id => CONFIGS.find(c => c.id === id);
-
-async function handleCopy(btn, cfg) {
-  const original = btn.textContent;
-  await copyText(cfg.url);
-  btn.classList.add('copied');
-  btn.textContent = '✓ Скопировано';
-  toast(`Ссылка скопирована — ${cfg.name}. Добавь подписку в happ / v2rayN`);
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    btn.textContent = original;
-  }, 1800);
-}
-
-function parseProxy(link) {
-  const params = new URLSearchParams(link.split('?')[1]);
-  return {
-    server: params.get('server') || 'неизвестно',
-    port: params.get('port') || '443',
-  };
-}
-
-function renderProxies() {
-  proxyGridEl.innerHTML = PROXIES.map((p, i) => {
-    const info = parseProxy(p.link);
-    return `
-    <article class="proxy-card reveal" style="transition-delay:${i * 60}ms">
-      <div class="proxy-top">
-        <span class="proxy-num mono">PROXY ${String(i + 1).padStart(2, '0')}</span>
-        <span class="proxy-status mono"><span class="dot"></span>MTProto</span>
-      </div>
-      <div class="proxy-server mono">${info.server}</div>
-      <span class="proxy-port mono">порт: <b>${info.port}</b> · нажми — прокси подключится в Telegram</span>
-      <div class="proxy-actions">
-        <a class="proxy-connect" href="${p.link}">${TG_ICON} Подключить</a>
-        <button class="icon-btn" data-copy-proxy="${p.link}" aria-label="Скопировать ссылку">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-        </button>
-      </div>
-    </article>`;
-  }).join('');
-
-  proxyGridEl.querySelectorAll('[data-copy-proxy]').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      await copyText(btn.dataset.copyProxy);
-      toast('Ссылка на прокси скопирована ♥');
-    });
-  });
-
-  observeReveals();
-}
-
-let previewCfg = null;
-
-async function openPreview(cfg) {
-  previewCfg = cfg;
-  modalType.textContent = '// ' + cfg.type.toLowerCase();
-  modalName.textContent = cfg.name;
-  modalText.textContent = 'загрузка…';
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  try {
-    const { text } = await getConfig(cfg);
-    modalText.textContent = text.length > 60000 ? text.slice(0, 60000) + '\n\n… (обрезано для предпросмотра)' : text;
-  } catch {
-    modalText.textContent = 'ошибка загрузки :(';
-  }
-}
-
-function closePreview() {
-  modal.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('modalClose').addEventListener('click', closePreview);
-modal.addEventListener('click', e => { if (e.target === modal) closePreview(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
-
-modalCopy.addEventListener('click', async () => {
-  if (!previewCfg) return;
-  const original = modalCopy.textContent;
-  await copyText(previewCfg.url);
-  modalCopy.classList.add('copied');
-  modalCopy.textContent = '✓ Скопировано';
-  toast(`Ссылка скопирована — ${previewCfg.name}`);
-  setTimeout(() => {
-    modalCopy.classList.remove('copied');
-    modalCopy.textContent = original;
-  }, 1800);
-});
-
-searchInput.addEventListener('input', e => {
-  state.query = e.target.value.trim();
-  renderConfigs();
-});
-
-document.getElementById('copyNickBtn').addEventListener('click', async () => {
-  await copyText(TELEGRAM_NICK);
-  toast(`Ник ${TELEGRAM_NICK} скопирован ♥`);
-});
-
-document.querySelectorAll('[data-hint]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    toast(`Скачай ${a.dataset.hint} и добавь подписку из буфера обмена`);
-  });
-});
-
-function toast(msg) {
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.innerHTML = `<span class="heart">❤</span> ${msg}`;
-  toastsEl.appendChild(el);
-  setTimeout(() => el.remove(), 2900);
-}
-
-(function initParticles(){
-  const wrap = document.getElementById('particles');
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('span');
-    const size = 2 + Math.random() * 5;
-    p.style.width  = size + 'px';
-    p.style.height = size + 'px';
-    p.style.left   = Math.random() * 100 + '%';
-    p.style.animationDuration = (9 + Math.random() * 14) + 's';
-    p.style.animationDelay    = (-Math.random() * 20) + 's';
-    wrap.appendChild(p);
-  }
-})();
-
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
-  });
-}, { threshold: 0.12 });
-
-function observeReveals() {
-  document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el));
-}
-
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 30);
-}, { passive: true });
-
-const burger = document.getElementById('burger');
-const navLinks = document.querySelector('.nav-links');
-burger.addEventListener('click', () => navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
-
-const blob1 = document.getElementById('blob1');
-const blob2 = document.getElementById('blob2');
-const cursorGlow = document.getElementById('cursorGlow');
-window.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth - 0.5);
-  const y = (e.clientY / window.innerHeight - 0.5);
-  blob1.style.translate = `${x * 40}px ${y * 40}px`;
-  blob2.style.translate = `${x * -30}px ${y * -30}px`;
-  if (cursorGlow) {
-    cursorGlow.style.left = e.clientX + 'px';
-    cursorGlow.style.top  = e.clientY + 'px';
-  }
-}, { passive: true });
-
-initTitleAnim();
-renderFilters();
-renderConfigs();
-renderProxies();
-observeReveals();
-
-
-              </script>
-                        </body>
-                        </html>
